@@ -19,7 +19,8 @@
         <nav class="admin-sidebar p-3" style="width: 240px;">
             <div class="text-white fs-5 fw-semibold mb-4">KAN Admin</div>
             <div class="nav flex-column">
-                <a class="nav-link px-2 py-2 rounded active" href="{{ route('admin.dashboard') }}">Дашборд</a>
+                <a class="nav-link px-2 py-2 rounded {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}" href="{{ route('admin.dashboard') }}">Дашборд</a>
+                <a class="nav-link px-2 py-2 rounded {{ request()->routeIs('admin.settings.*') ? 'active' : '' }}" href="{{ route('admin.settings.edit') }}">Налаштування сайту</a>
                 {{-- сюди додаватимуться пункти меню наступних модулів: Проекти, Новини, Вакансії... --}}
             </div>
         </nav>
