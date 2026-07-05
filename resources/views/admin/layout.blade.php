@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title', 'Адмінка') — {{ config('app.name') }}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
     <style>
         body { background-color: #f5f6f8; }
@@ -21,7 +22,9 @@
             <div class="nav flex-column">
                 <a class="nav-link px-2 py-2 rounded {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}" href="{{ route('admin.dashboard') }}">Дашборд</a>
                 <a class="nav-link px-2 py-2 rounded {{ request()->routeIs('admin.settings.*') ? 'active' : '' }}" href="{{ route('admin.settings.edit') }}">Налаштування сайту</a>
-                {{-- сюди додаватимуться пункти меню наступних модулів: Проекти, Новини, Вакансії... --}}
+                <a class="nav-link px-2 py-2 rounded {{ request()->routeIs('admin.news.*') ? 'active' : '' }}" href="{{ route('admin.news.index') }}">Новини</a>
+                <a class="nav-link px-2 py-2 rounded {{ request()->routeIs('admin.news-tags.*') ? 'active' : '' }}" href="{{ route('admin.news-tags.index') }}">Теги новин</a>
+                {{-- сюди додаватимуться пункти меню наступних модулів: Проекти, Вакансії... --}}
             </div>
         </nav>
         <div class="flex-grow-1">
