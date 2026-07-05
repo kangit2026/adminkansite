@@ -24,8 +24,6 @@ class SettingsController extends Controller
             'home_meta_description.uk' => ['nullable', 'string', 'max:160'],
             'home_meta_description.en' => ['nullable', 'string', 'max:160'],
             'home_og_image' => ['nullable', 'image', 'max:4096'],
-            'home_robots_index' => ['nullable', 'boolean'],
-            'home_robots_follow' => ['nullable', 'boolean'],
             'phone' => ['nullable', 'string', 'max:50'],
             'email' => ['nullable', 'email', 'max:255'],
             'telegram_chat_link' => ['nullable', 'url', 'max:255'],
@@ -40,9 +38,6 @@ class SettingsController extends Controller
         ]);
 
         $settings = SiteSetting::current();
-
-        $data['home_robots_index'] = $request->boolean('home_robots_index');
-        $data['home_robots_follow'] = $request->boolean('home_robots_follow');
 
         if ($request->hasFile('home_og_image')) {
             if ($settings->home_og_image) {

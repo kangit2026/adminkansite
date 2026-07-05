@@ -19,8 +19,6 @@ class SiteSetting extends Model
         'home_meta_title',
         'home_meta_description',
         'home_og_image',
-        'home_robots_index',
-        'home_robots_follow',
         'phone',
         'email',
         'telegram_chat_link',
@@ -36,8 +34,6 @@ class SiteSetting extends Model
     protected function casts(): array
     {
         return [
-            'home_robots_index' => 'boolean',
-            'home_robots_follow' => 'boolean',
             'copyright_year' => 'integer',
         ];
     }

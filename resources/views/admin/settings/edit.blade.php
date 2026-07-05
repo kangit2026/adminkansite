@@ -70,19 +70,6 @@
                 @endif
                 <input type="file" name="home_og_image" accept="image/*" class="form-control">
             </div>
-
-            <div class="form-check form-switch mb-2">
-                <input type="hidden" name="home_robots_index" value="0">
-                <input type="checkbox" name="home_robots_index" value="1" class="form-check-input" id="robots_index"
-                    @checked(old('home_robots_index', $settings->home_robots_index))>
-                <label class="form-check-label" for="robots_index">Дозволити індексацію головної сторінки (index)</label>
-            </div>
-            <div class="form-check form-switch">
-                <input type="hidden" name="home_robots_follow" value="0">
-                <input type="checkbox" name="home_robots_follow" value="1" class="form-check-input" id="robots_follow"
-                    @checked(old('home_robots_follow', $settings->home_robots_follow))>
-                <label class="form-check-label" for="robots_follow">Дозволити перехід пошукового бота за посиланнями (follow)</label>
-            </div>
         </div>
     </div>
 
