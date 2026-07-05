@@ -35,6 +35,22 @@ class SettingsController extends Controller
             'copyright_text.uk' => ['nullable', 'string', 'max:255'],
             'copyright_text.en' => ['nullable', 'string', 'max:255'],
             'copyright_year' => ['nullable', 'integer', 'min:2000', 'max:2100'],
+            'motto.uk' => ['nullable', 'string', 'max:255'],
+            'motto.en' => ['nullable', 'string', 'max:255'],
+            'awards_title.uk' => ['nullable', 'string', 'max:255'],
+            'awards_title.en' => ['nullable', 'string', 'max:255'],
+            'award_first_value' => ['nullable', 'integer', 'min:0'],
+            'award_first_description.uk' => ['nullable', 'string', 'max:255'],
+            'award_first_description.en' => ['nullable', 'string', 'max:255'],
+            'award_second_value' => ['nullable', 'integer', 'min:0'],
+            'award_second_description.uk' => ['nullable', 'string', 'max:255'],
+            'award_second_description.en' => ['nullable', 'string', 'max:255'],
+            'award_third_value' => ['nullable', 'integer', 'min:0'],
+            'award_third_description.uk' => ['nullable', 'string', 'max:255'],
+            'award_third_description.en' => ['nullable', 'string', 'max:255'],
+            'award_fourth_value' => ['nullable', 'integer', 'min:0'],
+            'award_fourth_description.uk' => ['nullable', 'string', 'max:255'],
+            'award_fourth_description.en' => ['nullable', 'string', 'max:255'],
         ]);
 
         $settings = SiteSetting::current();

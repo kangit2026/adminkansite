@@ -27,6 +27,14 @@ class SiteSettingResource extends JsonResource
                 'meta_title' => $this->home_meta_title,
                 'meta_description' => $this->home_meta_description,
                 'og_image' => $this->home_og_image ? asset('storage/'.$this->home_og_image) : null,
+                'motto' => $this->motto,
+                'awards_title' => $this->awards_title,
+                'awards' => [
+                    ['value' => $this->award_first_value, 'description' => $this->award_first_description],
+                    ['value' => $this->award_second_value, 'description' => $this->award_second_description],
+                    ['value' => $this->award_third_value, 'description' => $this->award_third_description],
+                    ['value' => $this->award_fourth_value, 'description' => $this->award_fourth_description],
+                ],
             ],
         ];
     }

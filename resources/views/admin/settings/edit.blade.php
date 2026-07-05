@@ -74,6 +74,69 @@
     </div>
 
     <div class="card mb-4">
+        <div class="card-header fw-semibold">Головна сторінка — блок "Про компанію" (мотто + статистика)</div>
+        <div class="card-body" x-data="{ lang: 'uk' }">
+            <ul class="nav nav-tabs mb-3">
+                <li class="nav-item">
+                    <button type="button" class="nav-link" :class="lang === 'uk' && 'active'" @click="lang = 'uk'">UA</button>
+                </li>
+                <li class="nav-item">
+                    <button type="button" class="nav-link" :class="lang === 'en' && 'active'" @click="lang = 'en'">EN</button>
+                </li>
+            </ul>
+
+            <div x-show="lang === 'uk'">
+                <div class="mb-3">
+                    <label class="form-label">Мотто (напр. "Створюй із Нами")</label>
+                    <input type="text" name="motto[uk]" class="form-control"
+                        value="{{ old('motto.uk', $settings->getTranslation('motto', 'uk')) }}">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Заголовок блоку (напр. "Про компанію")</label>
+                    <input type="text" name="awards_title[uk]" class="form-control"
+                        value="{{ old('awards_title.uk', $settings->getTranslation('awards_title', 'uk')) }}">
+                </div>
+            </div>
+            <div x-show="lang === 'en'">
+                <div class="mb-3">
+                    <label class="form-label">Мотто (EN)</label>
+                    <input type="text" name="motto[en]" class="form-control"
+                        value="{{ old('motto.en', $settings->getTranslation('motto', 'en')) }}">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Заголовок блоку (EN)</label>
+                    <input type="text" name="awards_title[en]" class="form-control"
+                        value="{{ old('awards_title.en', $settings->getTranslation('awards_title', 'en')) }}">
+                </div>
+            </div>
+
+            <hr>
+
+            @foreach (['first' => '1-й показник', 'second' => '2-й показник', 'third' => '3-й показник', 'fourth' => '4-й показник'] as $key => $label)
+                <div class="row g-3 mb-2 align-items-start">
+                    <div class="col-md-3">
+                        <label class="form-label">{{ $label }} — число</label>
+                        <input type="number" name="award_{{ $key }}_value" class="form-control"
+                            value="{{ old("award_{$key}_value", $settings->{"award_{$key}_value"}) }}" placeholder="10000">
+                    </div>
+                    <div class="col-md-4" x-show="lang === 'uk'">
+                        <label class="form-label">Опис (UA)</label>
+                        <input type="text" name="award_{{ $key }}_description[uk]" class="form-control"
+                            value="{{ old("award_{$key}_description.uk", $settings->getTranslation("award_{$key}_description", 'uk')) }}"
+                            placeholder="Щасливих сімей">
+                    </div>
+                    <div class="col-md-4" x-show="lang === 'en'">
+                        <label class="form-label">Опис (EN)</label>
+                        <input type="text" name="award_{{ $key }}_description[en]" class="form-control"
+                            value="{{ old("award_{$key}_description.en", $settings->getTranslation("award_{$key}_description", 'en')) }}"
+                            placeholder="Happy families">
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    </div>
+
+    <div class="card mb-4">
         <div class="card-header fw-semibold">Контакти (футер на всіх сторінках)</div>
         <div class="card-body">
             <div class="row g-3">

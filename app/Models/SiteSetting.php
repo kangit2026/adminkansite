@@ -13,6 +13,12 @@ class SiteSetting extends Model
         'home_meta_title',
         'home_meta_description',
         'copyright_text',
+        'motto',
+        'awards_title',
+        'award_first_description',
+        'award_second_description',
+        'award_third_description',
+        'award_fourth_description',
     ];
 
     protected $fillable = [
@@ -29,12 +35,26 @@ class SiteSetting extends Model
         'social_telegram',
         'copyright_text',
         'copyright_year',
+        'motto',
+        'awards_title',
+        'award_first_value',
+        'award_first_description',
+        'award_second_value',
+        'award_second_description',
+        'award_third_value',
+        'award_third_description',
+        'award_fourth_value',
+        'award_fourth_description',
     ];
 
     protected function casts(): array
     {
         return [
             'copyright_year' => 'integer',
+            'award_first_value' => 'integer',
+            'award_second_value' => 'integer',
+            'award_third_value' => 'integer',
+            'award_fourth_value' => 'integer',
         ];
     }
 
