@@ -15,6 +15,8 @@ class NewsResource extends JsonResource
             'slug' => $this->slug,
             'title' => $this->title,
             'text' => $this->text,
+            'metaTitle' => $this->meta_title,
+            'metaDescription' => $this->meta_description,
             'date' => optional($this->published_at)->toIso8601String(),
             'picture' => $this->picture ? asset('storage/'.$this->picture) : null,
             'external_link' => $this->external_link,

@@ -24,7 +24,9 @@
                 <a class="nav-link px-2 py-2 rounded {{ request()->routeIs('admin.settings.*') ? 'active' : '' }}" href="{{ route('admin.settings.edit') }}">Налаштування сайту</a>
                 <a class="nav-link px-2 py-2 rounded {{ request()->routeIs('admin.news.*') ? 'active' : '' }}" href="{{ route('admin.news.index') }}">Новини</a>
                 <a class="nav-link px-2 py-2 rounded {{ request()->routeIs('admin.news-tags.*') ? 'active' : '' }}" href="{{ route('admin.news-tags.index') }}">Теги новин</a>
-                {{-- сюди додаватимуться пункти меню наступних модулів: Проекти, Вакансії... --}}
+                <a class="nav-link px-2 py-2 rounded {{ request()->routeIs('admin.projects.*') ? 'active' : '' }}" href="{{ route('admin.projects.index') }}">Проєкти</a>
+                <a class="nav-link px-2 py-2 rounded {{ request()->routeIs('admin.project-categories.*') ? 'active' : '' }}" href="{{ route('admin.project-categories.index') }}">Категорії проєктів</a>
+                {{-- сюди додаватимуться пункти меню наступних модулів: Вакансії... --}}
             </div>
         </nav>
         <div class="flex-grow-1">

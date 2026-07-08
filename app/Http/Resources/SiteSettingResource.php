@@ -27,6 +27,7 @@ class SiteSettingResource extends JsonResource
                 'meta_title' => $this->home_meta_title,
                 'meta_description' => $this->home_meta_description,
                 'og_image' => $this->home_og_image ? asset('storage/'.$this->home_og_image) : null,
+                'video' => $this->home_video ? asset('storage/'.$this->home_video) : null,
                 'motto' => $this->motto,
                 'awards_title' => $this->awards_title,
                 'awards' => [
@@ -35,6 +36,22 @@ class SiteSettingResource extends JsonResource
                     ['value' => $this->award_third_value, 'description' => $this->award_third_description],
                     ['value' => $this->award_fourth_value, 'description' => $this->award_fourth_description],
                 ],
+            ],
+            'news' => [
+                'meta_title' => $this->news_meta_title,
+                'meta_description' => $this->news_meta_description,
+            ],
+            'projects' => [
+                'meta_title' => $this->projects_meta_title,
+                'meta_description' => $this->projects_meta_description,
+            ],
+            'commercial_ad' => [
+                'title' => $this->commercial_ad_title,
+                'link' => $this->commercial_ad_link,
+            ],
+            'project_ad' => [
+                'title' => $this->project_ad_title,
+                'link' => $this->project_ad_link,
             ],
         ];
     }

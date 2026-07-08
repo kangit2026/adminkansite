@@ -5,6 +5,8 @@
 @section('content')
 <h1 class="h3 mb-4">Налаштування сайту</h1>
 
+@include('admin._page_tabs')
+
 @if (session('status'))
     <div class="alert alert-success">{{ session('status') }}</div>
 @endif
@@ -69,6 +71,155 @@
                     </div>
                 @endif
                 <input type="file" name="home_og_image" accept="image/*" class="form-control">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Відео-маніфест (хіро-блок на головній)</label>
+                @if ($settings->home_video)
+                    <div class="mb-2">
+                        <video src="{{ asset('storage/'.$settings->home_video) }}" controls style="max-height:200px;" class="rounded border"></video>
+                    </div>
+                @else
+                    <div class="form-text mb-1">Зараз використовується дефолтний файл із фронтенду.</div>
+                @endif
+                <input type="file" name="home_video" accept="video/mp4,video/webm,video/quicktime" class="form-control">
+                <div class="form-text">MP4/WebM/MOV, до 50 МБ.</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header fw-semibold">Банер "Продаж комерційних приміщень" (головна + футер на /areas)</div>
+        <div class="card-body" x-data="{ lang: 'uk' }">
+            <ul class="nav nav-tabs mb-3">
+                <li class="nav-item">
+                    <button type="button" class="nav-link" :class="lang === 'uk' && 'active'" @click="lang = 'uk'">UA</button>
+                </li>
+                <li class="nav-item">
+                    <button type="button" class="nav-link" :class="lang === 'en' && 'active'" @click="lang = 'en'">EN</button>
+                </li>
+            </ul>
+
+            <div x-show="lang === 'uk'" class="mb-3">
+                <label class="form-label">Текст банера (UA)</label>
+                <input type="text" name="commercial_ad_title[uk]" class="form-control"
+                    value="{{ old('commercial_ad_title.uk', $settings->getTranslation('commercial_ad_title', 'uk')) }}">
+            </div>
+            <div x-show="lang === 'en'" class="mb-3">
+                <label class="form-label">Текст банера (EN)</label>
+                <input type="text" name="commercial_ad_title[en]" class="form-control"
+                    value="{{ old('commercial_ad_title.en', $settings->getTranslation('commercial_ad_title', 'en')) }}">
+            </div>
+
+            <div class="mb-1">
+                <label class="form-label">Посилання</label>
+                <input type="text" name="commercial_ad_link" class="form-control"
+                    value="{{ old('commercial_ad_link', $settings->commercial_ad_link) }}" placeholder="/platform">
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header fw-semibold">Банер "Шукаємо ділянки для нових проектів" (футер на решті сторінок)</div>
+        <div class="card-body" x-data="{ lang: 'uk' }">
+            <ul class="nav nav-tabs mb-3">
+                <li class="nav-item">
+                    <button type="button" class="nav-link" :class="lang === 'uk' && 'active'" @click="lang = 'uk'">UA</button>
+                </li>
+                <li class="nav-item">
+                    <button type="button" class="nav-link" :class="lang === 'en' && 'active'" @click="lang = 'en'">EN</button>
+                </li>
+            </ul>
+
+            <div x-show="lang === 'uk'" class="mb-3">
+                <label class="form-label">Текст банера (UA)</label>
+                <input type="text" name="project_ad_title[uk]" class="form-control"
+                    value="{{ old('project_ad_title.uk', $settings->getTranslation('project_ad_title', 'uk')) }}">
+            </div>
+            <div x-show="lang === 'en'" class="mb-3">
+                <label class="form-label">Текст банера (EN)</label>
+                <input type="text" name="project_ad_title[en]" class="form-control"
+                    value="{{ old('project_ad_title.en', $settings->getTranslation('project_ad_title', 'en')) }}">
+            </div>
+
+            <div class="mb-1">
+                <label class="form-label">Посилання</label>
+                <input type="text" name="project_ad_link" class="form-control"
+                    value="{{ old('project_ad_link', $settings->project_ad_link) }}" placeholder="/areas">
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header fw-semibold">Список новин (/news) — SEO</div>
+        <div class="card-body" x-data="{ lang: 'uk' }">
+            <ul class="nav nav-tabs mb-3">
+                <li class="nav-item">
+                    <button type="button" class="nav-link" :class="lang === 'uk' && 'active'" @click="lang = 'uk'">UA</button>
+                </li>
+                <li class="nav-item">
+                    <button type="button" class="nav-link" :class="lang === 'en' && 'active'" @click="lang = 'en'">EN</button>
+                </li>
+            </ul>
+
+            <div x-show="lang === 'uk'">
+                <div class="mb-3">
+                    <label class="form-label">Meta title (UA)</label>
+                    <input type="text" name="news_meta_title[uk]" maxlength="70" class="form-control"
+                        value="{{ old('news_meta_title.uk', $settings->getTranslation('news_meta_title', 'uk')) }}">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Meta description (UA)</label>
+                    <textarea name="news_meta_description[uk]" maxlength="160" rows="3" class="form-control">{{ old('news_meta_description.uk', $settings->getTranslation('news_meta_description', 'uk')) }}</textarea>
+                </div>
+            </div>
+            <div x-show="lang === 'en'">
+                <div class="mb-3">
+                    <label class="form-label">Meta title (EN)</label>
+                    <input type="text" name="news_meta_title[en]" maxlength="70" class="form-control"
+                        value="{{ old('news_meta_title.en', $settings->getTranslation('news_meta_title', 'en')) }}">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Meta description (EN)</label>
+                    <textarea name="news_meta_description[en]" maxlength="160" rows="3" class="form-control">{{ old('news_meta_description.en', $settings->getTranslation('news_meta_description', 'en')) }}</textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header fw-semibold">Список проєктів (/projects) — SEO</div>
+        <div class="card-body" x-data="{ lang: 'uk' }">
+            <ul class="nav nav-tabs mb-3">
+                <li class="nav-item">
+                    <button type="button" class="nav-link" :class="lang === 'uk' && 'active'" @click="lang = 'uk'">UA</button>
+                </li>
+                <li class="nav-item">
+                    <button type="button" class="nav-link" :class="lang === 'en' && 'active'" @click="lang = 'en'">EN</button>
+                </li>
+            </ul>
+
+            <div x-show="lang === 'uk'">
+                <div class="mb-3">
+                    <label class="form-label">Meta title (UA)</label>
+                    <input type="text" name="projects_meta_title[uk]" maxlength="70" class="form-control"
+                        value="{{ old('projects_meta_title.uk', $settings->getTranslation('projects_meta_title', 'uk')) }}">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Meta description (UA)</label>
+                    <textarea name="projects_meta_description[uk]" maxlength="160" rows="3" class="form-control">{{ old('projects_meta_description.uk', $settings->getTranslation('projects_meta_description', 'uk')) }}</textarea>
+                </div>
+            </div>
+            <div x-show="lang === 'en'">
+                <div class="mb-3">
+                    <label class="form-label">Meta title (EN)</label>
+                    <input type="text" name="projects_meta_title[en]" maxlength="70" class="form-control"
+                        value="{{ old('projects_meta_title.en', $settings->getTranslation('projects_meta_title', 'en')) }}">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Meta description (EN)</label>
+                    <textarea name="projects_meta_description[en]" maxlength="160" rows="3" class="form-control">{{ old('projects_meta_description.en', $settings->getTranslation('projects_meta_description', 'en')) }}</textarea>
+                </div>
             </div>
         </div>
     </div>
