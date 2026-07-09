@@ -45,7 +45,7 @@
                             <span class="badge bg-secondary">Чернетка</span>
                         @endif
                         @if ($item->big_picture)
-                            <span class="badge bg-info text-dark">big</span>
+                            <span class="badge badge-accent">big</span>
                         @endif
                     </td>
                     <td>{{ optional($item->published_at)->format('d.m.Y H:i') }}</td>

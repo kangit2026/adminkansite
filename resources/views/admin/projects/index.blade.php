@@ -40,7 +40,7 @@
                             <span class="badge bg-secondary">Чернетка</span>
                         @endif
                         @if ($item->is_featured)
-                            <span class="badge bg-info text-dark">рекомендований</span>
+                            <span class="badge badge-accent">рекомендований</span>
                         @endif
                     </td>
                     <td class="text-end">
