@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\NewsController;
 use App\Http\Controllers\Admin\NewsTagController;
 use App\Http\Controllers\Admin\ProjectCategoryController;
 use App\Http\Controllers\Admin\ProjectController;
+use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Admin\SettingsController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -44,5 +45,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('/project-categories', [ProjectCategoryController::class, 'store'])->name('project-categories.store');
         Route::put('/project-categories/{projectCategory}', [ProjectCategoryController::class, 'update'])->name('project-categories.update');
         Route::delete('/project-categories/{projectCategory}', [ProjectCategoryController::class, 'destroy'])->name('project-categories.destroy');
+
+        Route::resource('services', ServiceController::class)->except(['show']);
     });
 });

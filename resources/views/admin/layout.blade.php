@@ -325,6 +325,7 @@
                 <a class="nav-link {{ request()->routeIs('admin.news-tags.*') ? 'active' : '' }}" href="{{ route('admin.news-tags.index') }}"><i class="bi bi-tags"></i> Теги новин</a>
                 <a class="nav-link {{ request()->routeIs('admin.projects.*') ? 'active' : '' }}" href="{{ route('admin.projects.index') }}"><i class="bi bi-buildings"></i> Проєкти</a>
                 <a class="nav-link {{ request()->routeIs('admin.project-categories.*') ? 'active' : '' }}" href="{{ route('admin.project-categories.index') }}"><i class="bi bi-diagram-3"></i> Категорії проєктів</a>
+                <a class="nav-link {{ request()->routeIs('admin.services.*') ? 'active' : '' }}" href="{{ route('admin.services.index') }}"><i class="bi bi-briefcase"></i> Послуги</a>
                 {{-- сюди додаватимуться пункти меню наступних модулів: Вакансії... --}}
             </div>
 

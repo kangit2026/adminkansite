@@ -225,6 +225,43 @@
     </div>
 
     <div class="card mb-4">
+        <div class="card-header fw-semibold">Список послуг (/services) — SEO</div>
+        <div class="card-body" x-data="{ lang: 'uk' }">
+            <ul class="nav nav-tabs mb-3">
+                <li class="nav-item">
+                    <button type="button" class="nav-link" :class="lang === 'uk' && 'active'" @click="lang = 'uk'">UA</button>
+                </li>
+                <li class="nav-item">
+                    <button type="button" class="nav-link" :class="lang === 'en' && 'active'" @click="lang = 'en'">EN</button>
+                </li>
+            </ul>
+
+            <div x-show="lang === 'uk'">
+                <div class="mb-3">
+                    <label class="form-label">Meta title (UA)</label>
+                    <input type="text" name="services_meta_title[uk]" maxlength="70" class="form-control"
+                        value="{{ old('services_meta_title.uk', $settings->getTranslation('services_meta_title', 'uk')) }}">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Meta description (UA)</label>
+                    <textarea name="services_meta_description[uk]" maxlength="160" rows="3" class="form-control">{{ old('services_meta_description.uk', $settings->getTranslation('services_meta_description', 'uk')) }}</textarea>
+                </div>
+            </div>
+            <div x-show="lang === 'en'">
+                <div class="mb-3">
+                    <label class="form-label">Meta title (EN)</label>
+                    <input type="text" name="services_meta_title[en]" maxlength="70" class="form-control"
+                        value="{{ old('services_meta_title.en', $settings->getTranslation('services_meta_title', 'en')) }}">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Meta description (EN)</label>
+                    <textarea name="services_meta_description[en]" maxlength="160" rows="3" class="form-control">{{ old('services_meta_description.en', $settings->getTranslation('services_meta_description', 'en')) }}</textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-4">
         <div class="card-header fw-semibold">Головна сторінка — блок "Про компанію" (мотто + статистика)</div>
         <div class="card-body" x-data="{ lang: 'uk' }">
             <ul class="nav nav-tabs mb-3">

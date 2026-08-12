@@ -45,6 +45,10 @@ class SiteSettingResource extends JsonResource
                 'meta_title' => $this->projects_meta_title,
                 'meta_description' => $this->projects_meta_description,
             ],
+            'services' => [
+                'meta_title' => $this->services_meta_title,
+                'meta_description' => $this->services_meta_description,
+            ],
             'commercial_ad' => [
                 'title' => $this->commercial_ad_title,
                 'link' => $this->commercial_ad_link,
