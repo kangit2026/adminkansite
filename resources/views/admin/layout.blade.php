@@ -326,6 +326,7 @@
                 <a class="nav-link {{ request()->routeIs('admin.projects.*') ? 'active' : '' }}" href="{{ route('admin.projects.index') }}"><i class="bi bi-buildings"></i> Проєкти</a>
                 <a class="nav-link {{ request()->routeIs('admin.project-categories.*') ? 'active' : '' }}" href="{{ route('admin.project-categories.index') }}"><i class="bi bi-diagram-3"></i> Категорії проєктів</a>
                 <a class="nav-link {{ request()->routeIs('admin.services.*') ? 'active' : '' }}" href="{{ route('admin.services.index') }}"><i class="bi bi-briefcase"></i> Послуги</a>
+                <a class="nav-link {{ request()->routeIs('admin.inside-community.*') ? 'active' : '' }}" href="{{ route('admin.inside-community.edit') }}"><i class="bi bi-people"></i> Inside Community</a>
                 {{-- сюди додаватимуться пункти меню наступних модулів: Вакансії... --}}
             </div>
 

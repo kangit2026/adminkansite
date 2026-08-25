@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AboutController;
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\InsideCommunityController;
 use App\Http\Controllers\Api\NewsController;
 use App\Http\Controllers\Api\ProjectController;
 use App\Http\Controllers\Api\ServiceController;
@@ -10,6 +11,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/settings', [SettingsController::class, 'show']);
 Route::get('/about', [AboutController::class, 'show']);
+Route::get('/inside-community', [InsideCommunityController::class, 'show']);
 Route::get('/services', [ServiceController::class, 'index']);
 
 Route::get('/news', [NewsController::class, 'index']);

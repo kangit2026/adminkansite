@@ -3,7 +3,8 @@
 use App\Http\Controllers\Admin\AboutController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\NewsController;
+use App\Http\Controllers\Admin\InsideCommunityBlockController;
+use App\Http\Controllers\Admin\InsideCommunityPageController;
 use App\Http\Controllers\Admin\NewsTagController;
 use App\Http\Controllers\Admin\ProjectCategoryController;
 use App\Http\Controllers\Admin\ProjectController;
@@ -31,6 +32,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
         Route::get('/about', [AboutController::class, 'edit'])->name('about.edit');
         Route::put('/about', [AboutController::class, 'update'])->name('about.update');
+
+        Route::get('/inside-community', [InsideCommunityPageController::class, 'edit'])->name('inside-community.edit');
+        Route::put('/inside-community', [InsideCommunityPageController::class, 'update'])->name('inside-community.update');
+        Route::resource('inside-community/blocks', InsideCommunityBlockController::class)
+            ->except(['show'])
+            ->names('inside-community.blocks')
+            ->parameters(['blocks' => 'block']);
 
         Route::resource('news', NewsController::class)->except(['show']);
 
