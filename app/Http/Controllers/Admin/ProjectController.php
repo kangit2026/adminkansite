@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Project;
+use App\Support\RichTextSanitizer;
 use App\Models\ProjectCategory;
 use App\Models\ProjectPicture;
 use App\Models\Redirect;
@@ -153,6 +154,10 @@ class ProjectController extends Controller
         ]);
 
         unset($data['main_picture'], $data['logo'], $data['gallery'], $data['slug']);
+
+        if (isset($data['text'])) {
+            $data['text'] = RichTextSanitizer::cleanTranslatable($data['text']);
+        }
 
         $data['is_featured'] = $request->boolean('is_featured');
         $data['published_at'] = $request->input('published_at') ?: now();

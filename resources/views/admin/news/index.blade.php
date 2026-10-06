@@ -3,6 +3,8 @@
 @section('title', 'Новини')
 
 @section('content')
+@include('admin._news_section_tabs')
+
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h1 class="h3 mb-0">Новини</h1>
     <a href="{{ route('admin.news.create') }}" class="btn btn-dark">+ Додати новину</a>

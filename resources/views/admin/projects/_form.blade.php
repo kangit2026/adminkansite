@@ -44,10 +44,6 @@
                     value="{{ old('name.uk', $project->getTranslation('name', 'uk')) }}">
             </div>
             <div class="mb-3">
-                <label class="form-label">Опис (UA)</label>
-                <textarea name="text[uk]" rows="8" class="form-control">{{ old('text.uk', $project->getTranslation('text', 'uk')) }}</textarea>
-            </div>
-            <div class="mb-3">
                 <label class="form-label">Адреса (UA)</label>
                 <input type="text" name="address[uk]" class="form-control"
                     value="{{ old('address.uk', $project->getTranslation('address', 'uk')) }}">
@@ -65,10 +61,6 @@
                     value="{{ old('name.en', $project->getTranslation('name', 'en')) }}">
             </div>
             <div class="mb-3">
-                <label class="form-label">Опис (EN)</label>
-                <textarea name="text[en]" rows="8" class="form-control">{{ old('text.en', $project->getTranslation('text', 'en')) }}</textarea>
-            </div>
-            <div class="mb-3">
                 <label class="form-label">Адреса (EN)</label>
                 <input type="text" name="address[en]" class="form-control"
                     value="{{ old('address.en', $project->getTranslation('address', 'en')) }}">
@@ -77,6 +69,27 @@
                 <label class="form-label">Інфраструктура (EN) — по одному пункту на рядок</label>
                 <textarea name="infrastructure_en" rows="6" class="form-control">{{ old('infrastructure_en', implode("\n", $project->infrastructureFor('en'))) }}</textarea>
             </div>
+        </div>
+
+        <hr class="my-4">
+
+        <div class="mb-3">
+            <label class="form-label">Опис проєкту (UA)</label>
+            @include('admin._rich_text_field', [
+                'name' => 'text[uk]',
+                'id' => 'project-text-uk',
+                'value' => $project->getTranslation('text', 'uk'),
+                'oldKey' => 'text.uk',
+            ])
+        </div>
+        <div class="mb-1">
+            <label class="form-label">Опис проєкту (EN)</label>
+            @include('admin._rich_text_field', [
+                'name' => 'text[en]',
+                'id' => 'project-text-en',
+                'value' => $project->getTranslation('text', 'en'),
+                'oldKey' => 'text.en',
+            ])
         </div>
     </div>
 </div>

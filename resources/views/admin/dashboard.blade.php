@@ -36,7 +36,7 @@
     </div>
 </div>
 
-<h2 class="h6 text-muted mb-3">Швидкі дії</h2>
+<h2 class="h6 text-uppercase mb-3" style="font-size:.7rem;letter-spacing:.08em;font-weight:700;color:var(--kan-muted-soft);">Швидкі дії</h2>
 <div class="row g-3">
     <div class="col-md-3 col-6">
         <a href="{{ route('admin.news.create') }}" class="quick-link">
@@ -58,8 +58,8 @@
     </div>
     <div class="col-md-3 col-6">
         <a href="{{ route('admin.settings.edit') }}" class="quick-link">
-            <div class="stat-icon"><i class="bi bi-gear"></i></div>
-            <div class="small fw-medium">Налаштування сайту</div>
+            <div class="stat-icon"><i class="bi bi-house"></i></div>
+            <div class="small fw-medium">Головна</div>
         </a>
     </div>
 </div>

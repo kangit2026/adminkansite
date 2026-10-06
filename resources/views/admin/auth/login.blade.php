@@ -3,11 +3,11 @@
 @section('title', 'Вхід')
 
 @section('content')
-<div class="d-flex align-items-center justify-content-center" style="min-height: 100vh; background: radial-gradient(1100px 600px at 15% 10%, #eff6ff 0%, #f1f2f5 45%, #f1f2f5 100%);">
-    <div class="card border-0" style="width: 380px; box-shadow: 0 1px 2px rgba(16,20,40,.04), 0 20px 44px -18px rgba(37,99,235,.20);">
+<div class="d-flex align-items-center justify-content-center" style="min-height: 100vh; background: radial-gradient(900px 500px at 20% 0%, rgba(18,15,130,.08) 0%, #e8eaef 55%);">
+    <div class="card" style="width: 400px; border-color: var(--kan-border-strong);">
         <div class="card-body p-4 pt-5 pb-5">
             <div class="d-flex justify-content-center mb-4">
-                <div style="width:48px;height:48px;border-radius:13px;background:linear-gradient(135deg,#2563eb,#3b82f6);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:.9rem;">KAN</div>
+                <div class="admin-brand-mark" style="width:48px;height:48px;border-radius:13px;font-size:.85rem;">KAN</div>
             </div>
             <h1 class="h5 mb-1 text-center fw-semibold">Вхід в адмінку</h1>
             <p class="text-center text-muted small mb-4">{{ config('app.name') }}</p>

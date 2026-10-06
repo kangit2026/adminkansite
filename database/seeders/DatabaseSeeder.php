@@ -17,5 +17,8 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(AdminUserSeeder::class);
         $this->call(InsideCommunitySeeder::class);
+        $this->call(MarketPageSeeder::class);
+        $this->call(CareerPageSeeder::class);
+        $this->call(ContactsPageSeeder::class);
     }
 }

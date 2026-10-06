@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\News;
+use App\Support\RichTextSanitizer;
 use App\Models\NewsTag;
 use App\Models\Redirect;
 use Illuminate\Http\Request;
@@ -121,6 +122,10 @@ class NewsController extends Controller
         ]);
 
         unset($data['picture'], $data['slug']);
+
+        if (isset($data['text'])) {
+            $data['text'] = RichTextSanitizer::cleanTranslatable($data['text']);
+        }
 
         $data['big_picture'] = $request->boolean('big_picture');
         $data['published_at'] = $request->input('published_at') ?: now();

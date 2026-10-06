@@ -28,10 +28,6 @@
                 <input type="text" name="title[uk]" class="form-control"
                     value="{{ old('title.uk', $news->getTranslation('title', 'uk')) }}">
             </div>
-            <div class="mb-3">
-                <label class="form-label">Текст новини (UA)</label>
-                <textarea name="text[uk]" rows="8" class="form-control">{{ old('text.uk', $news->getTranslation('text', 'uk')) }}</textarea>
-            </div>
         </div>
 
         <div x-show="lang === 'en'">
@@ -40,10 +36,27 @@
                 <input type="text" name="title[en]" class="form-control"
                     value="{{ old('title.en', $news->getTranslation('title', 'en')) }}">
             </div>
-            <div class="mb-3">
-                <label class="form-label">Текст новини (EN)</label>
-                <textarea name="text[en]" rows="8" class="form-control">{{ old('text.en', $news->getTranslation('text', 'en')) }}</textarea>
-            </div>
+        </div>
+
+        <hr class="my-4">
+
+        <div class="mb-3">
+            <label class="form-label">Текст новини (UA)</label>
+            @include('admin._rich_text_field', [
+                'name' => 'text[uk]',
+                'id' => 'news-text-uk',
+                'value' => $news->getTranslation('text', 'uk'),
+                'oldKey' => 'text.uk',
+            ])
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Текст новини (EN)</label>
+            @include('admin._rich_text_field', [
+                'name' => 'text[en]',
+                'id' => 'news-text-en',
+                'value' => $news->getTranslation('text', 'en'),
+                'oldKey' => 'text.en',
+            ])
         </div>
 
         <div class="mb-3">

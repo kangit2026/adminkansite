@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\AboutPage;
+use App\Support\RichTextSanitizer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -51,6 +52,12 @@ class AboutController extends Controller
             'meta_description.en' => ['nullable', 'string', 'max:160'],
             'og_image' => ['nullable', 'image', 'max:4096'],
         ]);
+
+        foreach (['history', 'specialists', 'today_description'] as $field) {
+            if (isset($data[$field])) {
+                $data[$field] = RichTextSanitizer::cleanTranslatable($data[$field]);
+            }
+        }
 
         $about = AboutPage::current();
 

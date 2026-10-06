@@ -3,6 +3,8 @@
 @section('title', 'Проєкти')
 
 @section('content')
+@include('admin._projects_section_tabs')
+
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h1 class="h3 mb-0">Проєкти</h1>
     <a href="{{ route('admin.projects.create') }}" class="btn btn-dark">+ Додати проєкт</a>

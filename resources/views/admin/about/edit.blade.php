@@ -5,8 +5,6 @@
 @section('content')
 <h1 class="h3 mb-4">Сторінка "Про компанію" (/about)</h1>
 
-@include('admin._page_tabs')
-
 @if (session('status'))
     <div class="alert alert-success">{{ session('status') }}</div>
 @endif
@@ -66,35 +64,47 @@
 
     <div class="card mb-4">
         <div class="card-header fw-semibold">Вступний текст</div>
-        <div class="card-body" x-data="{ lang: 'uk' }">
-            <ul class="nav nav-tabs mb-3">
-                <li class="nav-item">
-                    <button type="button" class="nav-link" :class="lang === 'uk' && 'active'" @click="lang = 'uk'">UA</button>
-                </li>
-                <li class="nav-item">
-                    <button type="button" class="nav-link" :class="lang === 'en' && 'active'" @click="lang = 'en'">EN</button>
-                </li>
-            </ul>
-
-            <div x-show="lang === 'uk'">
-                <div class="mb-3">
-                    <label class="form-label">Перший абзац (UA)</label>
-                    <textarea name="history[uk]" rows="5" class="form-control">{{ old('history.uk', $about->getTranslation('history', 'uk')) }}</textarea>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Другий абзац (UA)</label>
-                    <textarea name="specialists[uk]" rows="4" class="form-control">{{ old('specialists.uk', $about->getTranslation('specialists', 'uk')) }}</textarea>
-                </div>
+        <div class="card-body">
+            <div class="mb-3">
+                <label class="form-label">Перший абзац (UA)</label>
+                @include('admin._rich_text_field', [
+                    'name' => 'history[uk]',
+                    'id' => 'about-history-uk',
+                    'value' => $about->getTranslation('history', 'uk'),
+                    'oldKey' => 'history.uk',
+                    'height' => 280,
+                ])
             </div>
-            <div x-show="lang === 'en'">
-                <div class="mb-3">
-                    <label class="form-label">Перший абзац (EN)</label>
-                    <textarea name="history[en]" rows="5" class="form-control">{{ old('history.en', $about->getTranslation('history', 'en')) }}</textarea>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Другий абзац (EN)</label>
-                    <textarea name="specialists[en]" rows="4" class="form-control">{{ old('specialists.en', $about->getTranslation('specialists', 'en')) }}</textarea>
-                </div>
+            <div class="mb-3">
+                <label class="form-label">Другий абзац (UA)</label>
+                @include('admin._rich_text_field', [
+                    'name' => 'specialists[uk]',
+                    'id' => 'about-specialists-uk',
+                    'value' => $about->getTranslation('specialists', 'uk'),
+                    'oldKey' => 'specialists.uk',
+                    'height' => 220,
+                ])
+            </div>
+            <hr class="my-4">
+            <div class="mb-3">
+                <label class="form-label">Перший абзац (EN)</label>
+                @include('admin._rich_text_field', [
+                    'name' => 'history[en]',
+                    'id' => 'about-history-en',
+                    'value' => $about->getTranslation('history', 'en'),
+                    'oldKey' => 'history.en',
+                    'height' => 280,
+                ])
+            </div>
+            <div class="mb-1">
+                <label class="form-label">Другий абзац (EN)</label>
+                @include('admin._rich_text_field', [
+                    'name' => 'specialists[en]',
+                    'id' => 'about-specialists-en',
+                    'value' => $about->getTranslation('specialists', 'en'),
+                    'oldKey' => 'specialists.en',
+                    'height' => 220,
+                ])
             </div>
         </div>
     </div>
@@ -117,10 +127,6 @@
                     <input type="text" name="today_title[uk]" class="form-control"
                         value="{{ old('today_title.uk', $about->getTranslation('today_title', 'uk')) }}">
                 </div>
-                <div class="mb-3">
-                    <label class="form-label">Опис (UA)</label>
-                    <textarea name="today_description[uk]" rows="4" class="form-control">{{ old('today_description.uk', $about->getTranslation('today_description', 'uk')) }}</textarea>
-                </div>
             </div>
             <div x-show="lang === 'en'">
                 <div class="mb-3">
@@ -128,10 +134,29 @@
                     <input type="text" name="today_title[en]" class="form-control"
                         value="{{ old('today_title.en', $about->getTranslation('today_title', 'en')) }}">
                 </div>
-                <div class="mb-3">
-                    <label class="form-label">Опис (EN)</label>
-                    <textarea name="today_description[en]" rows="4" class="form-control">{{ old('today_description.en', $about->getTranslation('today_description', 'en')) }}</textarea>
-                </div>
+            </div>
+
+            <hr class="my-4">
+
+            <div class="mb-3">
+                <label class="form-label">Опис (UA)</label>
+                @include('admin._rich_text_field', [
+                    'name' => 'today_description[uk]',
+                    'id' => 'about-today-uk',
+                    'value' => $about->getTranslation('today_description', 'uk'),
+                    'oldKey' => 'today_description.uk',
+                    'height' => 220,
+                ])
+            </div>
+            <div class="mb-1">
+                <label class="form-label">Опис (EN)</label>
+                @include('admin._rich_text_field', [
+                    'name' => 'today_description[en]',
+                    'id' => 'about-today-en',
+                    'value' => $about->getTranslation('today_description', 'en'),
+                    'oldKey' => 'today_description.en',
+                    'height' => 220,
+                ])
             </div>
         </div>
     </div>
