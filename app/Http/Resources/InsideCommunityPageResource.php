@@ -16,6 +16,7 @@ class InsideCommunityPageResource extends JsonResource
                 'video' => $this->hero_video ? asset('storage/'.$this->hero_video) : '/inside_community/kan_inside.mp4',
                 'imageUk' => $this->hero_image_uk ? asset('storage/'.$this->hero_image_uk) : null,
                 'imageEn' => $this->hero_image_en ? asset('storage/'.$this->hero_image_en) : null,
+                'imageAlt' => $this->getTranslation('hero_image_alt', app()->getLocale(), false) ?: null,
                 'title' => $this->hero_title,
                 'subtitle' => $this->hero_subtitle,
                 'paragraphs' => array_values(array_filter([
@@ -28,6 +29,10 @@ class InsideCommunityPageResource extends JsonResource
                 $this->complex_logo_1 ? asset('storage/'.$this->complex_logo_1) : '/inside_community/respublica.svg',
                 $this->complex_logo_2 ? asset('storage/'.$this->complex_logo_2) : '/inside_community/faina.svg',
             ])),
+            'complexLogoAlts' => [
+                $this->getTranslation('complex_logo_1_alt', app()->getLocale(), false) ?: null,
+                $this->getTranslation('complex_logo_2_alt', app()->getLocale(), false) ?: null,
+            ],
             'philosophy' => [
                 'title' => $this->philosophy_title,
                 'subtitle' => $this->philosophy_subtitle,

@@ -16,6 +16,8 @@ class News extends Model
         'text',
         'meta_title',
         'meta_description',
+        'picture_alt',
+        'partner_logo_alt',
     ];
 
     protected $fillable = [
@@ -25,7 +27,9 @@ class News extends Model
         'meta_title',
         'meta_description',
         'picture',
+        'picture_alt',
         'partner_logo',
+        'partner_logo_alt',
         'external_link',
         'big_picture',
         'is_partner',

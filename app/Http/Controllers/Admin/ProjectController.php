@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Project;
 use App\Support\RichTextSanitizer;
+use App\Support\StoredImage;
 use App\Models\ProjectCategory;
 use App\Models\ProjectPicture;
 use App\Models\Redirect;
@@ -42,14 +43,18 @@ class ProjectController extends Controller
         $project = Project::create($data);
 
         if ($request->hasFile('main_picture')) {
+            $path = $request->file('main_picture')->store('projects', 'public');
+            StoredImage::backupAndResize($path);
             $project->update([
-                'main_picture' => $request->file('main_picture')->store('projects', 'public'),
+                'main_picture' => $path,
             ]);
         }
 
         if ($request->hasFile('logo')) {
+            $path = $request->file('logo')->store('projects', 'public');
+            StoredImage::backupAndResize($path);
             $project->update([
-                'logo' => $request->file('logo')->store('projects', 'public'),
+                'logo' => $path,
             ]);
         }
 
@@ -82,6 +87,7 @@ class ProjectController extends Controller
                 Storage::disk('public')->delete($project->main_picture);
             }
             $data['main_picture'] = $request->file('main_picture')->store('projects', 'public');
+            StoredImage::backupAndResize($data['main_picture']);
         }
 
         if ($request->hasFile('logo')) {
@@ -89,6 +95,7 @@ class ProjectController extends Controller
                 Storage::disk('public')->delete($project->logo);
             }
             $data['logo'] = $request->file('logo')->store('projects', 'public');
+            StoredImage::backupAndResize($data['logo']);
         }
 
         $project->update($data);
@@ -134,9 +141,9 @@ class ProjectController extends Controller
             'text.en' => ['nullable', 'string'],
             'address.uk' => ['nullable', 'string', 'max:255'],
             'address.en' => ['nullable', 'string', 'max:255'],
-            'main_picture' => ['nullable', 'image', 'max:8192'],
-            'logo' => ['nullable', 'image', 'max:8192'],
-            'gallery.*' => ['nullable', 'image', 'max:8192'],
+            'main_picture' => ['nullable', 'image', 'max:65536'],
+            'logo' => ['nullable', 'image', 'max:65536'],
+            'gallery.*' => ['nullable', 'image', 'max:65536'],
             'video' => ['nullable', 'string', 'max:255'],
             'phone' => ['nullable', 'string', 'max:50'],
             'phone_label.uk' => ['nullable', 'string', 'max:255'],
@@ -199,9 +206,11 @@ class ProjectController extends Controller
         $nextOrder = (int) $project->pictures()->max('sort_order') + 1;
 
         foreach ($request->file('gallery') as $file) {
+            $path = $file->store('projects', 'public');
+            StoredImage::backupAndResize($path);
             ProjectPicture::create([
                 'project_id' => $project->id,
-                'path' => $file->store('projects', 'public'),
+                'path' => $path,
                 'sort_order' => $nextOrder++,
             ]);
         }

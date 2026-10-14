@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\InsideCommunityBlock;
+use App\Support\StoredImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
@@ -39,7 +40,7 @@ class InsideCommunityBlockController extends Controller
 
         if ($request->hasFile('image')) {
             $block->update([
-                'image' => $request->file('image')->store('inside_community', 'public'),
+                'image' => StoredImage::store($request->file('image'), 'inside_community'),
             ]);
         }
 
@@ -62,7 +63,7 @@ class InsideCommunityBlockController extends Controller
                 Storage::disk('public')->delete($block->image);
             }
 
-            $data['image'] = $request->file('image')->store('inside_community', 'public');
+            $data['image'] = StoredImage::store($request->file('image'), 'inside_community');
         }
 
         $block->update($data);
@@ -107,7 +108,9 @@ class InsideCommunityBlockController extends Controller
             'highlight_medium.en' => ['nullable', 'string'],
             'cta_text.uk' => ['nullable', 'string'],
             'cta_text.en' => ['nullable', 'string'],
-            'image' => ['nullable', 'image', 'max:4096'],
+            'image' => ['nullable', 'image', 'max:65536'],
+            'image_alt.uk' => ['nullable', 'string', 'max:255'],
+            'image_alt.en' => ['nullable', 'string', 'max:255'],
         ]);
 
         unset($data['image']);

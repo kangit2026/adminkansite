@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\MarketPage;
+use App\Support\StoredImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -42,8 +43,10 @@ class MarketController extends Controller
             'meta_title.en' => ['nullable', 'string', 'max:70'],
             'meta_description.uk' => ['nullable', 'string', 'max:160'],
             'meta_description.en' => ['nullable', 'string', 'max:160'],
-            'hero_image' => ['nullable', 'image', 'max:4096'],
-            'og_image' => ['nullable', 'image', 'max:4096'],
+            'hero_image' => ['nullable', 'image', 'max:65536'],
+            'og_image' => ['nullable', 'image', 'max:65536'],
+            'hero_image_alt.uk' => ['nullable', 'string', 'max:255'],
+            'hero_image_alt.en' => ['nullable', 'string', 'max:255'],
         ]);
 
         $market = MarketPage::current();
@@ -58,7 +61,7 @@ class MarketController extends Controller
             if ($market->hero_image) {
                 Storage::disk('public')->delete($market->hero_image);
             }
-            $data['hero_image'] = $request->file('hero_image')->store('market', 'public');
+            $data['hero_image'] = StoredImage::store($request->file('hero_image'), 'market');
         } else {
             unset($data['hero_image']);
         }
@@ -67,7 +70,7 @@ class MarketController extends Controller
             if ($market->og_image) {
                 Storage::disk('public')->delete($market->og_image);
             }
-            $data['og_image'] = $request->file('og_image')->store('pages', 'public');
+            $data['og_image'] = StoredImage::store($request->file('og_image'), 'pages');
         } else {
             unset($data['og_image']);
         }

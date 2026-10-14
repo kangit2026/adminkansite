@@ -10,12 +10,13 @@ class Service extends Model
 {
     use HasTranslations;
 
-    public array $translatable = ['title'];
+    public array $translatable = ['title', 'image_alt'];
 
     protected $fillable = [
         'title',
         'link',
         'image',
+        'image_alt',
         'sort_order',
         'status',
     ];

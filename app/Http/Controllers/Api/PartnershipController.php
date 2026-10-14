@@ -22,6 +22,9 @@ class PartnershipController extends Controller
                     'id' => $news->id,
                     'text' => $news->title,
                     'picture' => $logo ? asset('storage/'.$logo) : null,
+                    'alt' => ($news->partner_logo
+                        ? $news->getTranslation('partner_logo_alt', app()->getLocale(), false)
+                        : $news->getTranslation('picture_alt', app()->getLocale(), false)) ?: null,
                     'link' => $news->external_link ?: url('/news/'.$news->slug),
                 ];
             })

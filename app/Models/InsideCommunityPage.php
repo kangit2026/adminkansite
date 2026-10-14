@@ -21,14 +21,20 @@ class InsideCommunityPage extends Model
         'philosophy_subtitle',
         'meta_title',
         'meta_description',
+        'hero_image_alt',
+        'complex_logo_1_alt',
+        'complex_logo_2_alt',
     ];
 
     protected $fillable = [
         'hero_video',
         'hero_image_uk',
         'hero_image_en',
+        'hero_image_alt',
         'complex_logo_1',
+        'complex_logo_1_alt',
         'complex_logo_2',
+        'complex_logo_2_alt',
         'hero_title',
         'hero_subtitle',
         'hero_paragraph_1',

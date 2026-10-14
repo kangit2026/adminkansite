@@ -12,6 +12,7 @@ class MarketPageResource extends JsonResource
     {
         return [
             'heroImage' => $this->hero_image ? asset('storage/'.$this->hero_image) : null,
+            'heroImageAlt' => $this->getTranslation('hero_image_alt', app()->getLocale(), false) ?: null,
             'phone' => $this->phone,
             'badge' => $this->badge,
             'title' => $this->title,

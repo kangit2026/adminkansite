@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\InsideCommunityPage;
+use App\Support\StoredImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -38,11 +39,17 @@ class InsideCommunityPageController extends Controller
             'meta_description.uk' => ['nullable', 'string', 'max:160'],
             'meta_description.en' => ['nullable', 'string', 'max:160'],
             'hero_video' => ['nullable', 'file', 'mimetypes:video/mp4,video/webm', 'max:51200'],
-            'hero_image_uk' => ['nullable', 'image', 'max:4096'],
-            'hero_image_en' => ['nullable', 'image', 'max:4096'],
-            'complex_logo_1' => ['nullable', 'image', 'max:4096'],
-            'complex_logo_2' => ['nullable', 'image', 'max:4096'],
-            'og_image' => ['nullable', 'image', 'max:4096'],
+            'hero_image_uk' => ['nullable', 'image', 'max:65536'],
+            'hero_image_en' => ['nullable', 'image', 'max:65536'],
+            'complex_logo_1' => ['nullable', 'image', 'max:65536'],
+            'complex_logo_2' => ['nullable', 'image', 'max:65536'],
+            'og_image' => ['nullable', 'image', 'max:65536'],
+            'hero_image_alt.uk' => ['nullable', 'string', 'max:255'],
+            'hero_image_alt.en' => ['nullable', 'string', 'max:255'],
+            'complex_logo_1_alt.uk' => ['nullable', 'string', 'max:255'],
+            'complex_logo_1_alt.en' => ['nullable', 'string', 'max:255'],
+            'complex_logo_2_alt.uk' => ['nullable', 'string', 'max:255'],
+            'complex_logo_2_alt.en' => ['nullable', 'string', 'max:255'],
         ]);
 
         $page = InsideCommunityPage::current();
@@ -54,7 +61,9 @@ class InsideCommunityPageController extends Controller
                 }
 
                 $folder = str_starts_with($field, 'hero_video') ? 'inside_community/videos' : 'inside_community';
-                $data[$field] = $request->file($field)->store($folder, 'public');
+                $data[$field] = $field === 'hero_video'
+                    ? $request->file($field)->store($folder, 'public')
+                    : StoredImage::store($request->file($field), $folder);
             } else {
                 unset($data[$field]);
             }

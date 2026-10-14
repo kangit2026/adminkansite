@@ -25,6 +25,7 @@ class InsideCommunityBlockResource extends JsonResource
             'highlightMedium' => $this->highlight_medium,
             'ctaText' => $this->cta_text,
             'image' => $this->image ? asset('storage/'.$this->image) : null,
+            'imageAlt' => $this->getTranslation('image_alt', app()->getLocale(), false) ?: null,
         ];
     }
 }

@@ -16,6 +16,7 @@ class ServiceResource extends JsonResource
             'link' => $this->link,
             'external' => str_starts_with($this->link, 'http'),
             'image' => $this->image ? asset('storage/'.$this->image) : null,
+            'imageAlt' => $this->getTranslation('image_alt', app()->getLocale(), false) ?: null,
         ];
     }
 }

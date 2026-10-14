@@ -54,6 +54,7 @@
                     <input type="file" name="hero_image_en" accept="image/*" class="form-control">
                 </div>
             </div>
+            @include('admin._image_alt', ['name' => 'hero_image_alt', 'attribute' => 'hero_image_alt', 'model' => $page])
 
             <div class="row g-3 mt-2">
                 <div class="col-md-6">
@@ -62,6 +63,7 @@
                         <div class="mb-2"><img src="{{ asset('storage/'.$page->complex_logo_1) }}" alt="" style="max-height:60px;" class="rounded border"></div>
                     @endif
                     <input type="file" name="complex_logo_1" accept="image/*" class="form-control">
+                    @include('admin._image_alt', ['name' => 'complex_logo_1_alt', 'attribute' => 'complex_logo_1_alt', 'model' => $page])
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">Логотип комплексу 2</label>
@@ -69,6 +71,7 @@
                         <div class="mb-2"><img src="{{ asset('storage/'.$page->complex_logo_2) }}" alt="" style="max-height:60px;" class="rounded border"></div>
                     @endif
                     <input type="file" name="complex_logo_2" accept="image/*" class="form-control">
+                    @include('admin._image_alt', ['name' => 'complex_logo_2_alt', 'attribute' => 'complex_logo_2_alt', 'model' => $page])
                 </div>
             </div>
         </div>

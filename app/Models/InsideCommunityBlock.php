@@ -19,6 +19,7 @@ class InsideCommunityBlock extends Model
         'highlight_big',
         'highlight_medium',
         'cta_text',
+        'image_alt',
     ];
 
     protected $fillable = [
@@ -36,6 +37,7 @@ class InsideCommunityBlock extends Model
         'highlight_medium',
         'cta_text',
         'image',
+        'image_alt',
     ];
 
     public function scopePublished(Builder $query): Builder

@@ -37,6 +37,7 @@
                 </div>
             @endif
             <input type="file" name="image" accept="image/*" class="form-control">
+            @include('admin._image_alt', ['name' => 'image_alt', 'attribute' => 'image_alt', 'model' => $service])
         </div>
     </div>
 </div>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\News;
 use App\Support\RichTextSanitizer;
+use App\Support\StoredImage;
 use App\Models\NewsTag;
 use App\Models\Redirect;
 use Illuminate\Http\Request;
@@ -44,11 +45,11 @@ class NewsController extends Controller
         $files = [];
 
         if ($request->hasFile('picture')) {
-            $files['picture'] = $request->file('picture')->store('news', 'public');
+            $files['picture'] = StoredImage::store($request->file('picture'), 'news');
         }
 
         if ($request->hasFile('partner_logo')) {
-            $files['partner_logo'] = $request->file('partner_logo')->store('partners', 'public');
+            $files['partner_logo'] = StoredImage::store($request->file('partner_logo'), 'partners');
         }
 
         if ($files) {
@@ -82,7 +83,7 @@ class NewsController extends Controller
                 Storage::disk('public')->delete($news->picture);
             }
 
-            $data['picture'] = $request->file('picture')->store('news', 'public');
+            $data['picture'] = StoredImage::store($request->file('picture'), 'news');
         }
 
         if ($request->hasFile('partner_logo')) {
@@ -90,7 +91,7 @@ class NewsController extends Controller
                 Storage::disk('public')->delete($news->partner_logo);
             }
 
-            $data['partner_logo'] = $request->file('partner_logo')->store('partners', 'public');
+            $data['partner_logo'] = StoredImage::store($request->file('partner_logo'), 'partners');
         }
 
         $news->update($data);
@@ -132,8 +133,12 @@ class NewsController extends Controller
             'meta_title.en' => ['nullable', 'string', 'max:70'],
             'meta_description.uk' => ['nullable', 'string', 'max:160'],
             'meta_description.en' => ['nullable', 'string', 'max:160'],
-            'picture' => ['nullable', 'image', 'max:4096'],
-            'partner_logo' => ['nullable', 'image', 'max:4096'],
+            'picture' => ['nullable', 'image', 'max:65536'],
+            'picture_alt.uk' => ['nullable', 'string', 'max:255'],
+            'picture_alt.en' => ['nullable', 'string', 'max:255'],
+            'partner_logo' => ['nullable', 'image', 'max:65536'],
+            'partner_logo_alt.uk' => ['nullable', 'string', 'max:255'],
+            'partner_logo_alt.en' => ['nullable', 'string', 'max:255'],
             'external_link' => ['nullable', 'url', 'max:255'],
             'big_picture' => ['nullable', 'boolean'],
             'is_partner' => ['nullable', 'boolean'],

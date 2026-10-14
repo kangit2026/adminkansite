@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\AboutPage;
 use App\Support\RichTextSanitizer;
+use App\Support\StoredImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -50,7 +51,7 @@ class AboutController extends Controller
             'meta_title.en' => ['nullable', 'string', 'max:70'],
             'meta_description.uk' => ['nullable', 'string', 'max:160'],
             'meta_description.en' => ['nullable', 'string', 'max:160'],
-            'og_image' => ['nullable', 'image', 'max:4096'],
+            'og_image' => ['nullable', 'image', 'max:65536'],
         ]);
 
         foreach (['history', 'specialists', 'today_description'] as $field) {
@@ -66,7 +67,7 @@ class AboutController extends Controller
                 Storage::disk('public')->delete($about->og_image);
             }
 
-            $data['og_image'] = $request->file('og_image')->store('pages', 'public');
+            $data['og_image'] = StoredImage::store($request->file('og_image'), 'pages');
         } else {
             unset($data['og_image']);
         }

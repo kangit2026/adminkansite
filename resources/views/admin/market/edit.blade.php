@@ -42,6 +42,7 @@
                     <div class="form-text mb-2">За замовчуванням: bg.png з фронтенду</div>
                 @endif
                 <input type="file" name="hero_image" accept="image/*" class="form-control">
+                @include('admin._image_alt', ['name' => 'hero_image_alt', 'attribute' => 'hero_image_alt', 'model' => $market])
             </div>
         </div>
     </div>

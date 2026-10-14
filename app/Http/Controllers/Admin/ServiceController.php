@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Service;
+use App\Support\StoredImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -31,7 +32,7 @@ class ServiceController extends Controller
 
         if ($request->hasFile('image')) {
             $service->update([
-                'image' => $request->file('image')->store('services', 'public'),
+                'image' => StoredImage::store($request->file('image'), 'services'),
             ]);
         }
 
@@ -54,7 +55,7 @@ class ServiceController extends Controller
                 Storage::disk('public')->delete($service->image);
             }
 
-            $data['image'] = $request->file('image')->store('services', 'public');
+            $data['image'] = StoredImage::store($request->file('image'), 'services');
         }
 
         $service->update($data);
@@ -81,7 +82,9 @@ class ServiceController extends Controller
             'title.uk' => ['required', 'string', 'max:255'],
             'title.en' => ['nullable', 'string', 'max:255'],
             'link' => ['required', 'string', 'max:255'],
-            'image' => ['nullable', 'image', 'max:4096'],
+            'image' => ['nullable', 'image', 'max:65536'],
+            'image_alt.uk' => ['nullable', 'string', 'max:255'],
+            'image_alt.en' => ['nullable', 'string', 'max:255'],
             'sort_order' => ['nullable', 'integer'],
             'status' => ['required', 'in:draft,published'],
         ]);

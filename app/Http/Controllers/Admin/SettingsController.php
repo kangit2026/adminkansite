@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\SiteSetting;
+use App\Support\StoredImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -23,7 +24,7 @@ class SettingsController extends Controller
             'home_meta_title.en' => ['nullable', 'string', 'max:70'],
             'home_meta_description.uk' => ['nullable', 'string', 'max:160'],
             'home_meta_description.en' => ['nullable', 'string', 'max:160'],
-            'home_og_image' => ['nullable', 'image', 'max:4096'],
+            'home_og_image' => ['nullable', 'image', 'max:65536'],
             'home_video' => ['nullable', 'mimetypes:video/mp4,video/webm,video/quicktime', 'max:51200'],
             'commercial_ad_title.uk' => ['nullable', 'string', 'max:255'],
             'commercial_ad_title.en' => ['nullable', 'string', 'max:255'],
@@ -53,7 +54,7 @@ class SettingsController extends Controller
                 Storage::disk('public')->delete($settings->home_og_image);
             }
 
-            $data['home_og_image'] = $request->file('home_og_image')->store('settings', 'public');
+            $data['home_og_image'] = StoredImage::store($request->file('home_og_image'), 'settings');
         } else {
             unset($data['home_og_image']);
         }

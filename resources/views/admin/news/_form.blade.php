@@ -67,6 +67,7 @@
                 </div>
             @endif
             <input type="file" name="picture" accept="image/*" class="form-control">
+            @include('admin._image_alt', ['name' => 'picture_alt', 'attribute' => 'picture_alt', 'model' => $news])
         </div>
 
         <div class="mb-3">
@@ -96,6 +97,7 @@
                 </div>
             @endif
             <input type="file" name="partner_logo" accept="image/*" class="form-control">
+            @include('admin._image_alt', ['name' => 'partner_logo_alt', 'attribute' => 'partner_logo_alt', 'model' => $news])
             <div class="form-text">Окремо від картинки новини. Цей файл показується в блоці партнерів на головній.</div>
         </div>
     </div>

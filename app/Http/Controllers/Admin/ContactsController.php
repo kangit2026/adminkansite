@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\ContactsPage;
+use App\Support\StoredImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -45,7 +46,7 @@ class ContactsController extends Controller
             'meta_title.en' => ['nullable', 'string', 'max:70'],
             'meta_description.uk' => ['nullable', 'string', 'max:160'],
             'meta_description.en' => ['nullable', 'string', 'max:160'],
-            'og_image' => ['nullable', 'image', 'max:4096'],
+            'og_image' => ['nullable', 'image', 'max:65536'],
         ]);
 
         $data['map_enabled'] = $request->boolean('map_enabled');
@@ -56,7 +57,7 @@ class ContactsController extends Controller
             if ($contacts->og_image) {
                 Storage::disk('public')->delete($contacts->og_image);
             }
-            $data['og_image'] = $request->file('og_image')->store('pages', 'public');
+            $data['og_image'] = StoredImage::store($request->file('og_image'), 'pages');
         } else {
             unset($data['og_image']);
         }

@@ -19,6 +19,7 @@ class NewsResource extends JsonResource
             'metaDescription' => $this->meta_description,
             'date' => optional($this->published_at)->toIso8601String(),
             'picture' => $this->picture ? asset('storage/'.$this->picture) : null,
+            'pictureAlt' => $this->getTranslation('picture_alt', app()->getLocale(), false) ?: null,
             'external_link' => $this->external_link,
             'big_picture' => $this->big_picture,
             'tags' => $this->whenLoaded(

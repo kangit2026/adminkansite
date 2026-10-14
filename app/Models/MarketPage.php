@@ -22,10 +22,12 @@ class MarketPage extends Model
         'trust_text',
         'meta_title',
         'meta_description',
+        'hero_image_alt',
     ];
 
     protected $fillable = [
         'hero_image',
+        'hero_image_alt',
         'phone',
         'badge',
         'title',
