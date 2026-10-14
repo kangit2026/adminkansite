@@ -25,6 +25,7 @@ return Application::configure(basePath: dirname(__DIR__))
         // Все URL сайту, крім /api, обслуговує фронтенд (Next.js) — тому
         // стандартні редиректи auth/guest middleware мають вести саме
         // на шляхи всередині /admin, а не на неіснуючі /login, /home.
+        $middleware->trustProxies(at: '*');
         $middleware->redirectGuestsTo(fn () => route('admin.login'));
         $middleware->redirectUsersTo(fn () => route('admin.dashboard'));
 

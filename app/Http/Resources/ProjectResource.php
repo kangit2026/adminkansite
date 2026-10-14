@@ -31,14 +31,18 @@ class ProjectResource extends JsonResource
             'fullArea' => $this->full_area,
             'website' => $this->website,
             'phone' => $this->phone,
+            'phoneLabel' => $this->phone_label,
             'video' => $this->video,
             'mainPicture' => $this->main_picture ? asset('storage/'.$this->main_picture) : null,
+            'mainPictureAlt' => $this->pictureAlt('main_picture_alt'),
             'logoUrl' => $this->logo ? asset('storage/'.$this->logo) : null,
+            'logoAlt' => $this->pictureAlt('logo_alt'),
             'isFeatured' => $this->is_featured,
             'pictures' => $this->whenLoaded(
                 'pictures',
                 fn () => $this->pictures->map(fn ($p) => [
                     'url' => asset('storage/'.$p->path),
+                    'alt' => $p->getTranslation('alt', app()->getLocale(), false) ?: null,
                 ])->values()
             ),
             // НЕ $request->getLocale() — це окремий (Symfony) механізм
@@ -48,5 +52,12 @@ class ProjectResource extends JsonResource
                 ->map(fn ($name) => ['name' => $name])
                 ->values(),
         ];
+    }
+
+    private function pictureAlt(string $attribute): ?string
+    {
+        $alt = $this->getTranslation($attribute, app()->getLocale(), false);
+
+        return $alt !== '' && $alt !== null ? $alt : null;
     }
 }

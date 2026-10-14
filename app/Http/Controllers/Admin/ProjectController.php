@@ -95,6 +95,7 @@ class ProjectController extends Controller
 
         $this->deleteGallery($request, $project);
         $this->storeGallery($request, $project);
+        $this->savePictureAlts($request, $project);
 
         if ($oldSlug && $newSlug && $oldSlug !== $newSlug) {
             Redirect::point("/project/{$oldSlug}", "/project/{$newSlug}");
@@ -138,6 +139,8 @@ class ProjectController extends Controller
             'gallery.*' => ['nullable', 'image', 'max:8192'],
             'video' => ['nullable', 'string', 'max:255'],
             'phone' => ['nullable', 'string', 'max:50'],
+            'phone_label.uk' => ['nullable', 'string', 'max:255'],
+            'phone_label.en' => ['nullable', 'string', 'max:255'],
             'website' => ['nullable', 'string', 'max:255'],
             'full_area' => ['nullable', 'string', 'max:100'],
             'project_office' => ['nullable', 'string', 'max:255'],
@@ -151,9 +154,16 @@ class ProjectController extends Controller
             'meta_title.en' => ['nullable', 'string', 'max:70'],
             'meta_description.uk' => ['nullable', 'string', 'max:160'],
             'meta_description.en' => ['nullable', 'string', 'max:160'],
+            'main_picture_alt.uk' => ['nullable', 'string', 'max:255'],
+            'main_picture_alt.en' => ['nullable', 'string', 'max:255'],
+            'logo_alt.uk' => ['nullable', 'string', 'max:255'],
+            'logo_alt.en' => ['nullable', 'string', 'max:255'],
+            'picture_alt' => ['nullable', 'array'],
+            'picture_alt.*.uk' => ['nullable', 'string', 'max:255'],
+            'picture_alt.*.en' => ['nullable', 'string', 'max:255'],
         ]);
 
-        unset($data['main_picture'], $data['logo'], $data['gallery'], $data['slug']);
+        unset($data['main_picture'], $data['logo'], $data['gallery'], $data['slug'], $data['picture_alt']);
 
         if (isset($data['text'])) {
             $data['text'] = RichTextSanitizer::cleanTranslatable($data['text']);
@@ -213,6 +223,29 @@ class ProjectController extends Controller
         foreach ($pictures as $picture) {
             Storage::disk('public')->delete($picture->path);
             $picture->delete();
+        }
+    }
+
+    private function savePictureAlts(Request $request, Project $project): void
+    {
+        $alts = $request->input('picture_alt', []);
+
+        if (! is_array($alts) || $alts === []) {
+            return;
+        }
+
+        $pictures = ProjectPicture::query()
+            ->where('project_id', $project->id)
+            ->whereIn('id', array_keys($alts))
+            ->get();
+
+        foreach ($pictures as $picture) {
+            $row = $alts[$picture->id] ?? [];
+            $picture->setTranslations('alt', [
+                'uk' => trim((string) ($row['uk'] ?? '')),
+                'en' => trim((string) ($row['en'] ?? '')),
+            ]);
+            $picture->save();
         }
     }
 

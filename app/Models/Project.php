@@ -17,6 +17,9 @@ class Project extends Model
         'address',
         'meta_title',
         'meta_description',
+        'phone_label',
+        'main_picture_alt',
+        'logo_alt',
     ];
 
     protected $fillable = [
@@ -29,9 +32,12 @@ class Project extends Model
         'meta_title',
         'meta_description',
         'main_picture',
+        'main_picture_alt',
         'logo',
+        'logo_alt',
         'video',
         'phone',
+        'phone_label',
         'website',
         'full_area',
         'project_office',

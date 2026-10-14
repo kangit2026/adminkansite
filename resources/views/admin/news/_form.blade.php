@@ -80,6 +80,24 @@
                 @checked(old('big_picture', $news->big_picture))>
             <label class="form-check-label" for="big_picture">Велика картка (big picture)</label>
         </div>
+
+        <div class="form-check form-switch mb-2">
+            <input type="hidden" name="is_partner" value="0">
+            <input type="checkbox" name="is_partner" value="1" class="form-check-input" id="is_partner"
+                @checked(old('is_partner', $news->is_partner))>
+            <label class="form-check-label" for="is_partner">Партнер — показувати в блоці на головній</label>
+        </div>
+
+        <div class="mb-3 mt-3">
+            <label class="form-label">Логотип партнера</label>
+            @if ($news->partner_logo)
+                <div class="mb-2">
+                    <img src="{{ asset('storage/'.$news->partner_logo) }}" alt="" style="max-height:80px;" class="rounded border bg-white p-2">
+                </div>
+            @endif
+            <input type="file" name="partner_logo" accept="image/*" class="form-control">
+            <div class="form-text">Окремо від картинки новини. Цей файл показується в блоці партнерів на головній.</div>
+        </div>
     </div>
 </div>
 

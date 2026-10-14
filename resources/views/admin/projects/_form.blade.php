@@ -100,12 +100,17 @@
         <div class="row g-4">
             <div class="col-md-6">
                 <label class="form-label">Головне зображення</label>
+                <div class="form-text mb-2">Це фото картки проєкту на головній і в списку. На сторінці проєкту великі кадри беруться з галереї нижче.</div>
                 @if ($project->main_picture)
                     <div class="mb-2">
                         <img src="{{ asset('storage/'.$project->main_picture) }}" alt="" style="max-height:120px;" class="rounded border">
                     </div>
                 @endif
                 <input type="file" name="main_picture" accept="image/*" class="form-control">
+                <label class="form-label mt-2">Підпис головного зображення (UA)</label>
+                <input type="text" name="main_picture_alt[uk]" maxlength="255" class="form-control" value="{{ old('main_picture_alt.uk', $project->getTranslation('main_picture_alt', 'uk', false)) }}" placeholder="Живий квартал БІОРИТМ, фасад">
+                <label class="form-label mt-2">Alt of the main image (EN)</label>
+                <input type="text" name="main_picture_alt[en]" maxlength="255" class="form-control" value="{{ old('main_picture_alt.en', $project->getTranslation('main_picture_alt', 'en', false)) }}" placeholder="Biorytm residential quarter, facade">
             </div>
             <div class="col-md-6">
                 <label class="form-label">Логотип</label>
@@ -115,6 +120,10 @@
                     </div>
                 @endif
                 <input type="file" name="logo" accept="image/*" class="form-control">
+                <label class="form-label mt-2">Підпис логотипу (UA)</label>
+                <input type="text" name="logo_alt[uk]" maxlength="255" class="form-control" value="{{ old('logo_alt.uk', $project->getTranslation('logo_alt', 'uk', false)) }}" placeholder="Живий квартал БІОРИТМ, логотип">
+                <label class="form-label mt-2">Alt of the logo (EN)</label>
+                <input type="text" name="logo_alt[en]" maxlength="255" class="form-control" value="{{ old('logo_alt.en', $project->getTranslation('logo_alt', 'en', false)) }}" placeholder="Biorytm residential quarter, logo">
             </div>
         </div>
 
@@ -124,8 +133,10 @@
         @if ($project->relationLoaded('pictures') && $project->pictures->isNotEmpty())
             <div class="d-flex flex-wrap gap-3 mb-3">
                 @foreach ($project->pictures as $picture)
-                    <div class="text-center">
+                    <div style="width: 220px;">
                         <img src="{{ asset('storage/'.$picture->path) }}" alt="" style="width:100px;height:100px;object-fit:cover;" class="rounded border d-block mb-1">
+                        <input type="text" name="picture_alt[{{ $picture->id }}][uk]" maxlength="255" class="form-control form-control-sm mb-1" value="{{ old('picture_alt.'.$picture->id.'.uk', $picture->getTranslation('alt', 'uk', false)) }}" placeholder="Підпис (UA)">
+                        <input type="text" name="picture_alt[{{ $picture->id }}][en]" maxlength="255" class="form-control form-control-sm mb-1" value="{{ old('picture_alt.'.$picture->id.'.en', $picture->getTranslation('alt', 'en', false)) }}" placeholder="Alt (EN)">
                         <label class="form-check-label small text-danger">
                             <input type="checkbox" name="delete_pictures[]" value="{{ $picture->id }}" class="form-check-input">
                             видалити
@@ -135,7 +146,7 @@
             </div>
         @endif
         <input type="file" name="gallery[]" accept="image/*" multiple class="form-control">
-        <div class="form-text">Можна вибрати кілька файлів одразу — додадуться до вже наявної галереї.</div>
+        <div class="form-text">Можна вибрати кілька файлів одразу — додадуться до вже наявної галереї. Підпис з’явиться після збереження, поруч із кадром. Якщо підпис порожній, на сайті буде назва проєкту.</div>
     </div>
 </div>
 
@@ -146,6 +157,14 @@
             <div class="col-md-6">
                 <label class="form-label">Телефон</label>
                 <input type="text" name="phone" class="form-control" value="{{ old('phone', $project->phone) }}">
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Підпис біля телефону (UA)</label>
+                <input type="text" name="phone_label[uk]" class="form-control" value="{{ old('phone_label.uk', $project->getTranslation('phone_label', 'uk', false)) }}" placeholder="Відділ продажу">
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Підпис біля телефону (EN)</label>
+                <input type="text" name="phone_label[en]" class="form-control" value="{{ old('phone_label.en', $project->getTranslation('phone_label', 'en', false)) }}" placeholder="Sales department">
             </div>
             <div class="col-md-6">
                 <label class="form-label">Сайт проєкту</label>

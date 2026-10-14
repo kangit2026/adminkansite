@@ -41,10 +41,18 @@ class NewsController extends Controller
         $news = News::create($data);
         $news->tags()->sync($request->input('tags', []));
 
+        $files = [];
+
         if ($request->hasFile('picture')) {
-            $news->update([
-                'picture' => $request->file('picture')->store('news', 'public'),
-            ]);
+            $files['picture'] = $request->file('picture')->store('news', 'public');
+        }
+
+        if ($request->hasFile('partner_logo')) {
+            $files['partner_logo'] = $request->file('partner_logo')->store('partners', 'public');
+        }
+
+        if ($files) {
+            $news->update($files);
         }
 
         return redirect()
@@ -77,6 +85,14 @@ class NewsController extends Controller
             $data['picture'] = $request->file('picture')->store('news', 'public');
         }
 
+        if ($request->hasFile('partner_logo')) {
+            if ($news->partner_logo) {
+                Storage::disk('public')->delete($news->partner_logo);
+            }
+
+            $data['partner_logo'] = $request->file('partner_logo')->store('partners', 'public');
+        }
+
         $news->update($data);
         $news->tags()->sync($request->input('tags', []));
 
@@ -93,6 +109,10 @@ class NewsController extends Controller
     {
         if ($news->picture) {
             Storage::disk('public')->delete($news->picture);
+        }
+
+        if ($news->partner_logo) {
+            Storage::disk('public')->delete($news->partner_logo);
         }
 
         $news->delete();
@@ -113,21 +133,24 @@ class NewsController extends Controller
             'meta_description.uk' => ['nullable', 'string', 'max:160'],
             'meta_description.en' => ['nullable', 'string', 'max:160'],
             'picture' => ['nullable', 'image', 'max:4096'],
+            'partner_logo' => ['nullable', 'image', 'max:4096'],
             'external_link' => ['nullable', 'url', 'max:255'],
             'big_picture' => ['nullable', 'boolean'],
+            'is_partner' => ['nullable', 'boolean'],
             'status' => ['required', 'in:draft,published'],
             'published_at' => ['nullable', 'date'],
             'tags' => ['nullable', 'array'],
             'tags.*' => ['integer', 'exists:news_tags,id'],
         ]);
 
-        unset($data['picture'], $data['slug']);
+        unset($data['picture'], $data['partner_logo'], $data['slug']);
 
         if (isset($data['text'])) {
             $data['text'] = RichTextSanitizer::cleanTranslatable($data['text']);
         }
 
         $data['big_picture'] = $request->boolean('big_picture');
+        $data['is_partner'] = $request->boolean('is_partner');
         $data['published_at'] = $request->input('published_at') ?: now();
 
         return $data;

@@ -49,6 +49,9 @@
                         @if ($item->big_picture)
                             <span class="badge badge-accent">big</span>
                         @endif
+                        @if ($item->is_partner)
+                            <span class="badge bg-light text-dark border">партнер</span>
+                        @endif
                     </td>
                     <td>{{ optional($item->published_at)->format('d.m.Y H:i') }}</td>
                     <td class="text-end">

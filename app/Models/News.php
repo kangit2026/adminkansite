@@ -25,8 +25,10 @@ class News extends Model
         'meta_title',
         'meta_description',
         'picture',
+        'partner_logo',
         'external_link',
         'big_picture',
+        'is_partner',
         'status',
         'published_at',
     ];
@@ -35,6 +37,7 @@ class News extends Model
     {
         return [
             'big_picture' => 'boolean',
+            'is_partner' => 'boolean',
             'published_at' => 'datetime',
         ];
     }
