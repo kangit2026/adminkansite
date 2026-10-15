@@ -78,7 +78,7 @@
             @include('admin._rich_text_field', [
                 'name' => 'text[uk]',
                 'id' => 'project-text-uk',
-                'value' => $project->getTranslation('text', 'uk'),
+                'value' => \App\Support\RichTextSanitizer::plainTextToEditorHtml($project->getTranslation('text', 'uk', false)),
                 'oldKey' => 'text.uk',
             ])
         </div>
@@ -87,7 +87,7 @@
             @include('admin._rich_text_field', [
                 'name' => 'text[en]',
                 'id' => 'project-text-en',
-                'value' => $project->getTranslation('text', 'en'),
+                'value' => \App\Support\RichTextSanitizer::plainTextToEditorHtml($project->getTranslation('text', 'en', false)),
                 'oldKey' => 'text.en',
             ])
         </div>

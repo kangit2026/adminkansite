@@ -173,7 +173,9 @@ class ProjectController extends Controller
         unset($data['main_picture'], $data['logo'], $data['gallery'], $data['slug'], $data['picture_alt']);
 
         if (isset($data['text'])) {
-            $data['text'] = RichTextSanitizer::cleanTranslatable($data['text']);
+            $data['text'] = RichTextSanitizer::plainTranslatable(
+                RichTextSanitizer::cleanTranslatable($data['text'])
+            );
         }
 
         $data['is_featured'] = $request->boolean('is_featured');
