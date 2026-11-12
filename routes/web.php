@@ -82,5 +82,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
         Route::get('/contact-submissions', [ContactSubmissionController::class, 'index'])->name('contact-submissions.index');
         Route::put('/contact-submissions/{contactSubmission}', [ContactSubmissionController::class, 'update'])->name('contact-submissions.update');
+        Route::get('/contact-submissions/{contactSubmission}/files/{index}', [ContactSubmissionController::class, 'file'])->whereNumber('index')->name('contact-submissions.file');
     });
 });

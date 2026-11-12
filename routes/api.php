@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\ContactFormController;
 use App\Http\Controllers\Api\ContactsController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\InsideCommunityController;
+use App\Http\Controllers\Api\LeadController;
 use App\Http\Controllers\Api\MarketController;
 use App\Http\Controllers\Api\NewsController;
 use App\Http\Controllers\Api\PartnershipController;
@@ -23,6 +24,9 @@ Route::get('/career/categories', [CareerController::class, 'categories']);
 Route::get('/career/vacancies', [CareerController::class, 'vacancies']);
 Route::get('/contacts', [ContactsController::class, 'show']);
 Route::post('/contact', [ContactFormController::class, 'store'])->middleware('throttle:contact-form');
+Route::post('/leads/land', [LeadController::class, 'land'])->middleware('throttle:contact-form');
+Route::post('/leads/apartment', [LeadController::class, 'apartment'])->middleware('throttle:contact-form');
+Route::post('/leads/deck', [LeadController::class, 'deck'])->middleware('throttle:contact-form');
 Route::get('/services', [ServiceController::class, 'index']);
 
 Route::get('/Partnership', [PartnershipController::class, 'index']);
