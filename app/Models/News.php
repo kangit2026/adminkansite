@@ -17,7 +17,6 @@ class News extends Model
         'meta_title',
         'meta_description',
         'picture_alt',
-        'partner_logo_alt',
     ];
 
     protected $fillable = [
@@ -28,11 +27,8 @@ class News extends Model
         'meta_description',
         'picture',
         'picture_alt',
-        'partner_logo',
-        'partner_logo_alt',
         'external_link',
         'big_picture',
-        'is_partner',
         'status',
         'published_at',
     ];
@@ -41,7 +37,6 @@ class News extends Model
     {
         return [
             'big_picture' => 'boolean',
-            'is_partner' => 'boolean',
             'published_at' => 'datetime',
         ];
     }
@@ -49,6 +44,12 @@ class News extends Model
     public function tags()
     {
         return $this->belongsToMany(NewsTag::class, 'news_tag_pivot');
+    }
+
+    /** Натискання «Поділитися» на сторінці новини. */
+    public function shares()
+    {
+        return $this->hasMany(NewsShare::class);
     }
 
     public function scopePublished(Builder $query): Builder

@@ -20,5 +20,6 @@ class DatabaseSeeder extends Seeder
         $this->call(MarketPageSeeder::class);
         $this->call(CareerPageSeeder::class);
         $this->call(ContactsPageSeeder::class);
+        $this->call(CareerVacancySeeder::class);
     }
 }

@@ -35,4 +35,12 @@ return [
         ],
     ],
 
+    // сайт (Next.js): після змін у вакансіях адмінка просить його оновити сторінки /career
+    'site' => [
+        // адреса сайту для посилань «Відкрити на сайті» в адмінці, без / у кінці
+        'url' => rtrim((string) env('SITE_URL', ''), '/'),
+        'revalidate_url' => env('SITE_REVALIDATE_URL'),
+        'revalidate_secret' => env('SITE_REVALIDATE_SECRET'),
+    ],
+
 ];

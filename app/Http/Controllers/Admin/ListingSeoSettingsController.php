@@ -25,12 +25,6 @@ class ListingSeoSettingsController extends Controller
                 'prefix' => 'projects_meta',
                 'tabs' => 'admin._projects_section_tabs',
             ],
-            'services' => [
-                'title' => 'Послуги',
-                'path' => '/services',
-                'prefix' => 'services_meta',
-                'tabs' => 'admin._services_section_tabs',
-            ],
         ];
     }
 

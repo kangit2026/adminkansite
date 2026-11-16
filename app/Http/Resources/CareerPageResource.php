@@ -18,6 +18,8 @@ class CareerPageResource extends JsonResource
             'metaTitle' => $this->meta_title,
             'metaDescription' => $this->meta_description,
             'ogImage' => $this->og_image ? asset('storage/'.$this->og_image) : null,
+            // null — блок «Знаєте сильного спеціаліста?» не показувати
+            'referralUrl' => $this->referral_url ?: null,
         ];
     }
 }

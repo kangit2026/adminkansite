@@ -12,7 +12,7 @@ class SiteFooterSettingsController extends Controller
     {
         $settings = SiteSetting::current();
 
-        return view('admin.contacts.site', compact('settings'));
+        return view('admin.footer.edit', compact('settings'));
     }
 
     public function update(Request $request)
@@ -36,6 +36,6 @@ class SiteFooterSettingsController extends Controller
 
         SiteSetting::current()->update($data);
 
-        return back()->with('status', 'Контакти та футер збережено.');
+        return back()->with('status', 'Футер збережено.');
     }
 }

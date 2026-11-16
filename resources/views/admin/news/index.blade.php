@@ -23,6 +23,7 @@
                 <th>Теги</th>
                 <th>Статус</th>
                 <th>Дата публікації</th>
+                <th class="text-end" title="Скільки разів натиснули «Поділитися» на сторінці новини, за весь час">Поширень</th>
                 <th style="width:160px;"></th>
             </tr>
         </thead>
@@ -49,11 +50,9 @@
                         @if ($item->big_picture)
                             <span class="badge badge-accent">big</span>
                         @endif
-                        @if ($item->is_partner)
-                            <span class="badge bg-light text-dark border">партнер</span>
-                        @endif
                     </td>
                     <td>{{ optional($item->published_at)->format('d.m.Y H:i') }}</td>
+                    <td class="text-end {{ $item->shares_count ? 'fw-semibold' : 'text-muted' }}" data-shares="{{ $item->shares_count }}">{{ $item->shares_count }}</td>
                     <td class="text-end">
                         <a href="{{ route('admin.news.edit', $item) }}" class="btn btn-sm btn-outline-secondary" title="Редагувати">
                             <i class="bi bi-pencil"></i>
@@ -69,7 +68,7 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="6" class="text-center text-muted py-4">Новин ще немає</td>
+                    <td colspan="7" class="text-center text-muted py-4">Новин ще немає</td>
                 </tr>
             @endforelse
         </tbody>
