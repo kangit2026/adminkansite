@@ -61,6 +61,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
         Route::get('/users', [UserController::class, 'index'])->name('users.index');
         Route::post('/users', [UserController::class, 'store'])->name('users.store');
+        Route::put('/users/{user}/name', [UserController::class, 'rename'])->name('users.rename');
         Route::put('/users/{user}/password', [UserController::class, 'password'])->name('users.password');
         Route::put('/users/{user}/active', [UserController::class, 'toggle'])->name('users.toggle');
 

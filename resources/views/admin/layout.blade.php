@@ -543,15 +543,28 @@
         <div class="flex-grow-1 admin-main">
             <header class="admin-header d-flex justify-content-between align-items-center px-4 py-3">
                 <div class="page-title">@yield('title', 'Адмінка')</div>
-                <div class="d-flex align-items-center gap-3">
-                    <div class="admin-user-chip">
+                <div class="position-relative" x-data="{ open: false }" x-on:click.outside="open = false" x-on:keydown.escape.window="open = false">
+                    <button type="button" class="admin-user-chip" style="cursor:pointer;" x-on:click="open = ! open" aria-haspopup="true" :aria-expanded="open">
                         <div class="admin-user-avatar">{{ mb_substr(auth()->user()->name, 0, 1) }}</div>
-                        <span class="text-muted small pe-1">{{ auth()->user()->name }}</span>
+                        <span class="small pe-1 text-start" style="line-height:1.2;">
+                            <span class="d-block fw-semibold">{{ auth()->user()->name }}</span>
+                            <span class="d-block text-muted" style="font-size:.7rem;">{{ auth()->user()->hasRole('admin') ? 'Адміністратор' : (auth()->user()->hasRole('hr') ? 'HR' : '') }}</span>
+                        </span>
+                        <i class="bi bi-chevron-down small text-muted pe-1"></i>
+                    </button>
+                    <div x-show="open" x-cloak x-transition.opacity class="dropdown-menu show end-0 mt-2 p-2 shadow" style="min-width:240px;">
+                        <div class="px-2 pb-2 border-bottom mb-2">
+                            <div class="fw-semibold">{{ auth()->user()->name }}</div>
+                            <div class="small text-muted text-break">{{ auth()->user()->email }}</div>
+                        </div>
+                        @role('admin')
+                            <a class="dropdown-item rounded" href="{{ route('admin.users.index') }}"><i class="bi bi-person-gear me-2"></i>Користувачі та імена</a>
+                        @endrole
+                        <form method="POST" action="{{ route('admin.logout') }}">
+                            @csrf
+                            <button type="submit" class="dropdown-item rounded"><i class="bi bi-box-arrow-right me-2"></i>Вийти</button>
+                        </form>
                     </div>
-                    <form method="POST" action="{{ route('admin.logout') }}">
-                        @csrf
-                        <button type="submit" class="btn btn-sm btn-outline-secondary"><i class="bi bi-box-arrow-right"></i> Вийти</button>
-                    </form>
                 </div>
             </header>
             <main class="p-4">

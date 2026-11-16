@@ -48,6 +48,15 @@ class UserController extends Controller
         return back()->with('status', 'Користувача «'.$user->name.'» додано.');
     }
 
+    public function rename(Request $request, User $user)
+    {
+        $data = $request->validate(['name' => ['required', 'string', 'max:255']], self::MESSAGES, self::ATTRIBUTES);
+
+        $user->update(['name' => trim($data['name'])]);
+
+        return back()->with('status', 'Ім’я збережено: «'.$user->name.'».');
+    }
+
     public function password(Request $request, User $user)
     {
         $data = $request->validate(['password' => ['required', 'string', 'min:8']], self::MESSAGES, self::ATTRIBUTES);
