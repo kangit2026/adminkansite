@@ -25,24 +25,33 @@
             </thead>
             <tbody>
                 @foreach ($users as $user)
-                    <tr x-data="{ pass: false }">
-                        <td class="fw-semibold">{{ $user->name }}</td>
+                    <tr x-data="{ pass: false, rename: false }">
+                        <td class="fw-semibold">{{ $user->name }}@if ($user->is(auth()->user())) <span class="small text-muted fw-normal">(це ви)</span>@endif</td>
                         <td class="small text-muted text-break">{{ $user->email }}</td>
                         <td class="small">{{ $user->hasRole('admin') ? 'Адміністратор' : ($user->hasRole('hr') ? 'HR' : '—') }}</td>
                         <td class="small {{ $user->is_active ? 'text-success' : 'text-muted' }}">{{ $user->is_active ? 'Активний' : 'Вимкнено' }}</td>
                         <td class="text-end">
-                            @if ($user->is(auth()->user()))
-                                <span class="small text-muted">це ви</span>
-                            @else
-                                <div class="d-flex justify-content-end gap-2 flex-wrap">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary" x-on:click="pass = ! pass">Змінити пароль</button>
+                            <div class="d-flex justify-content-end gap-2 flex-wrap">
+                                <button type="button" class="btn btn-sm btn-outline-secondary" x-on:click="rename = ! rename; pass = false">Ім’я</button>
+                                @unless ($user->is(auth()->user()))
+                                    <button type="button" class="btn btn-sm btn-outline-secondary" x-on:click="pass = ! pass; rename = false">Змінити пароль</button>
                                     <form method="POST" action="{{ route('admin.users.toggle', $user) }}">
                                         @csrf
                                         @method('PUT')
                                         <button type="submit" class="btn btn-sm btn-outline-secondary">{{ $user->is_active ? 'Вимкнути' : 'Увімкнути' }}</button>
                                     </form>
-                                </div>
-                                {{-- x-show — на обгортці: .d-flex з !important перебиває display:none від Alpine --}}
+                                @endunless
+                            </div>
+                            {{-- x-show — на обгортці: .d-flex з !important перебиває display:none від Alpine --}}
+                            <div x-show="rename" x-cloak>
+                                <form method="POST" action="{{ route('admin.users.rename', $user) }}" class="d-flex gap-2 mt-2">
+                                    @csrf
+                                    @method('PUT')
+                                    <input type="text" name="name" class="form-control form-control-sm" value="{{ $user->name }}" maxlength="255" required aria-label="Ім’я співробітника">
+                                    <button type="submit" class="btn btn-sm btn-dark">Зберегти</button>
+                                </form>
+                            </div>
+                            @unless ($user->is(auth()->user()))
                                 <div x-show="pass" x-cloak>
                                     <form method="POST" action="{{ route('admin.users.password', $user) }}" class="d-flex gap-2 mt-2">
                                         @csrf
@@ -51,7 +60,7 @@
                                         <button type="submit" class="btn btn-sm btn-dark">Зберегти</button>
                                     </form>
                                 </div>
-                            @endif
+                            @endunless
                         </td>
                     </tr>
                 @endforeach
