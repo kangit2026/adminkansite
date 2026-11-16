@@ -4,7 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CareerPageResource;
+use App\Http\Resources\VacancyDetailResource;
+use App\Http\Resources\VacancyResource;
+use App\Models\CareerDirection;
 use App\Models\CareerPage;
+use App\Models\Vacancy;
 use App\Support\CareerVacanciesCatalog;
 use Illuminate\Http\Request;
 
@@ -14,6 +18,46 @@ class CareerController extends Controller
     {
         return new CareerPageResource(CareerPage::current());
     }
+
+    /** Напрями з кількістю активних вакансій; сайт показує у фільтрі лише непорожні. */
+    public function directions()
+    {
+        return response()->json(
+            CareerDirection::ordered()
+                ->withCount(['vacancies as active_count' => fn ($q) => $q->active()])
+                ->get()
+                ->map(fn (CareerDirection $d) => ['id' => $d->id, 'name' => $d->name, 'count' => $d->active_count])
+        );
+    }
+
+    /** Активні вакансії з адмінки HR, нові — першими. */
+    public function jobs()
+    {
+        return VacancyResource::collection(
+            Vacancy::active()->with('direction')->orderByDesc('published_at')->orderByDesc('id')->get()
+        );
+    }
+
+    /** Чернетка й невідома адреса — 404, закрита — 410 (сайт веде на /career). */
+    public function job(string $slug)
+    {
+        $vacancy = Vacancy::with('direction')->where('slug', $slug)->first();
+
+        if (! $vacancy || $vacancy->status === 'draft') {
+            return response()->json(['message' => 'Вакансію не знайдено.'], 404);
+        }
+
+        if ($vacancy->status === 'closed') {
+            return response()->json(['message' => 'Вакансію закрито.'], 410);
+        }
+
+        return new VacancyDetailResource($vacancy);
+    }
+
+    /*
+     * categories() і vacancies() нижче — старий статичний каталог для попереднього фронтенду.
+     * Прибрати разом із CareerVacanciesCatalog, коли сайт перейде на /career/jobs (етап 2).
+     */
 
     public function categories(Request $request)
     {

@@ -1,182 +1,146 @@
 @csrf
 
-<div class="card mb-4">
-    <div class="card-header fw-semibold">Основне</div>
-    <div class="card-body" x-data="{ lang: 'uk' }">
-        <ul class="nav nav-tabs mb-3">
-            <li class="nav-item">
-                <button type="button" class="nav-link" :class="lang === 'uk' && 'active'" @click="lang = 'uk'">UA</button>
-            </li>
-            <li class="nav-item">
-                <button type="button" class="nav-link" :class="lang === 'en' && 'active'" @click="lang = 'en'">EN</button>
-            </li>
+@php
+    // Вкладки основної колонки. Права колонка (публікація, теги, адреса) видна завжди.
+    $tabs = [
+        'uk' => 'Українська',
+        'en' => 'English',
+        'picture' => 'Картинка',
+    ];
+
+    // На якій вкладці поле — щоб після помилки відкрити саме її.
+    $tabOf = fn (string $field) => match (true) {
+        in_array($field, ['title.uk', 'text.uk'], true) => 'uk',
+        in_array($field, ['title.en', 'text.en'], true) => 'en',
+        str_starts_with($field, 'picture'), $field === 'big_picture' => 'picture',
+        default => null,
+    };
+    $errorTabs = collect($errors->keys())->map($tabOf)->filter()->unique()->values();
+    $status = old('status', $news->status ?: 'draft');
+@endphp
+
+<style>
+    @media (min-width: 992px) {
+        .news-tabs .nav-link { padding-inline: .8rem; }
+    }
+</style>
+
+<div class="row g-4 align-items-start">
+    {{-- Основне: тексти мовами, картинка --}}
+    <div class="col-lg-7 col-xl-8" x-data="{ tab: @js($errorTabs->first() ?? 'uk') }">
+        <ul class="nav nav-pills news-tabs mb-3">
+            @foreach ($tabs as $key => $label)
+                <li class="nav-item">
+                    <button type="button" class="nav-link" :class="tab === '{{ $key }}' && 'active'" @click="tab = '{{ $key }}'">
+                        {{ $label }}
+                        @if ($errorTabs->contains($key))
+                            <i class="bi bi-exclamation-circle-fill text-danger ms-1" title="Є помилка"></i>
+                        @endif
+                    </button>
+                </li>
+            @endforeach
         </ul>
 
-        <div class="mb-3">
-            <label class="form-label">URL (slug) — один на обидві мови, англійською</label>
-            <input type="text" name="slug" class="form-control"
-                value="{{ old('slug', $news->slug) }}"
-                placeholder="залиште порожнім — згенерується з англійського заголовка">
-            <div class="form-text">
-                Змінюйте обережно: стара адреса автоматично почне 301-редиректити на нову, але краще без потреби не чіпати.
-            </div>
-        </div>
+        @foreach (['uk' => 'UA', 'en' => 'EN'] as $lang => $code)
+            <div class="card" x-show="tab === '{{ $lang }}'" x-cloak>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label">Заголовок ({{ $code }})@if ($lang === 'uk') <span class="text-danger">*</span>@endif</label>
+                        <input type="text" name="title[{{ $lang }}]" class="form-control form-control-lg"
+                            value="{{ old("title.$lang", $news->getTranslation('title', $lang, false)) }}">
+                        <div class="form-text">Він же заголовок сторінки в Google і в посиланнях у месенджерах.</div>
+                    </div>
 
-        <div x-show="lang === 'uk'">
-            <div class="mb-3">
-                <label class="form-label">Заголовок (UA)</label>
-                <input type="text" name="title[uk]" class="form-control"
-                    value="{{ old('title.uk', $news->getTranslation('title', 'uk')) }}">
-            </div>
-        </div>
-
-        <div x-show="lang === 'en'">
-            <div class="mb-3">
-                <label class="form-label">Заголовок (EN)</label>
-                <input type="text" name="title[en]" class="form-control"
-                    value="{{ old('title.en', $news->getTranslation('title', 'en')) }}">
-            </div>
-        </div>
-
-        <hr class="my-4">
-
-        <div class="mb-3">
-            <label class="form-label">Текст новини (UA)</label>
-            @include('admin._rich_text_field', [
-                'name' => 'text[uk]',
-                'id' => 'news-text-uk',
-                'value' => $news->getTranslation('text', 'uk'),
-                'oldKey' => 'text.uk',
-            ])
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Текст новини (EN)</label>
-            @include('admin._rich_text_field', [
-                'name' => 'text[en]',
-                'id' => 'news-text-en',
-                'value' => $news->getTranslation('text', 'en'),
-                'oldKey' => 'text.en',
-            ])
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label">Зображення</label>
-            @if ($news->picture)
-                <div class="mb-2">
-                    <img src="{{ asset('storage/'.$news->picture) }}" alt="" style="max-height:120px;" class="rounded border">
+                    <label class="form-label">Текст новини ({{ $code }})</label>
+                    @include('admin._rich_text_field', [
+                        'name' => "text[$lang]",
+                        'id' => "news-text-$lang",
+                        'value' => $news->getTranslation('text', $lang, false),
+                        'oldKey' => "text.$lang",
+                        'height' => 480,
+                    ])
                 </div>
-            @endif
-            <input type="file" name="picture" accept="image/*" class="form-control">
-            @include('admin._image_alt', ['name' => 'picture_alt', 'attribute' => 'picture_alt', 'model' => $news])
-        </div>
+            </div>
+        @endforeach
 
-        <div class="mb-3">
-            <label class="form-label">Зовнішнє посилання (якщо новина — просто лінк назовні)</label>
-            <input type="url" name="external_link" class="form-control" value="{{ old('external_link', $news->external_link) }}">
-        </div>
+        <div class="card" x-show="tab === 'picture'" x-cloak>
+            <div class="card-body">
+                <label class="form-label">Зображення</label>
+                @if ($news->picture)
+                    <div class="mb-2">
+                        <img src="{{ asset('storage/'.$news->picture) }}" alt="" style="max-height:200px;" class="rounded border">
+                    </div>
+                @endif
+                <input type="file" name="picture" accept="image/*" class="form-control">
+                @include('admin._image_alt', ['name' => 'picture_alt', 'attribute' => 'picture_alt', 'model' => $news])
 
-        <div class="form-check form-switch mb-2">
-            <input type="hidden" name="big_picture" value="0">
-            <input type="checkbox" name="big_picture" value="1" class="form-check-input" id="big_picture"
-                @checked(old('big_picture', $news->big_picture))>
-            <label class="form-check-label" for="big_picture">Велика картка (big picture)</label>
-        </div>
-
-        <div class="form-check form-switch mb-2">
-            <input type="hidden" name="is_partner" value="0">
-            <input type="checkbox" name="is_partner" value="1" class="form-check-input" id="is_partner"
-                @checked(old('is_partner', $news->is_partner))>
-            <label class="form-check-label" for="is_partner">Партнер — показувати в блоці на головній</label>
-        </div>
-
-        <div class="mb-3 mt-3">
-            <label class="form-label">Логотип партнера</label>
-            @if ($news->partner_logo)
-                <div class="mb-2">
-                    <img src="{{ asset('storage/'.$news->partner_logo) }}" alt="" style="max-height:80px;" class="rounded border bg-white p-2">
+                <div class="form-check form-switch mt-4">
+                    <input type="hidden" name="big_picture" value="0">
+                    <input type="checkbox" name="big_picture" value="1" class="form-check-input" id="big_picture"
+                        @checked(old('big_picture', $news->big_picture))>
+                    <label class="form-check-label" for="big_picture">Велика картка (big picture)</label>
                 </div>
-            @endif
-            <input type="file" name="partner_logo" accept="image/*" class="form-control">
-            @include('admin._image_alt', ['name' => 'partner_logo_alt', 'attribute' => 'partner_logo_alt', 'model' => $news])
-            <div class="form-text">Окремо від картинки новини. Цей файл показується в блоці партнерів на головній.</div>
-        </div>
-    </div>
-</div>
-
-<div class="card mb-4">
-    <div class="card-header fw-semibold">Публікація</div>
-    <div class="card-body">
-        <div class="row g-3">
-            <div class="col-md-6">
-                <label class="form-label">Статус</label>
-                <select name="status" class="form-select">
-                    <option value="draft" @selected(old('status', $news->status) === 'draft')>Чернетка</option>
-                    <option value="published" @selected(old('status', $news->status) === 'published')>Опубліковано</option>
-                </select>
-            </div>
-            <div class="col-md-6">
-                <label class="form-label">Дата публікації</label>
-                <input type="datetime-local" name="published_at" class="form-control"
-                    value="{{ old('published_at', optional($news->published_at ?? now())->format('Y-m-d\TH:i')) }}">
             </div>
         </div>
     </div>
-</div>
 
-<div class="card mb-4">
-    <div class="card-header fw-semibold">Теги</div>
-    <div class="card-body">
-        @forelse ($tags as $tag)
-            <div class="form-check form-check-inline">
-                <input type="checkbox" name="tags[]" value="{{ $tag->id }}" class="form-check-input" id="tag-{{ $tag->id }}"
-                    @checked(collect(old('tags', $selectedTagIds))->contains($tag->id))>
-                <label class="form-check-label" for="tag-{{ $tag->id }}">{{ $tag->getTranslation('name', 'uk') }}</label>
-            </div>
-        @empty
-            <p class="text-muted mb-0">
-                Тегів ще немає. Додати можна в розділі
-                <a href="{{ route('admin.news-tags.index') }}">«Теги новин»</a>.
-            </p>
-        @endforelse
-    </div>
-</div>
+    {{-- Права колонка: публікація і збереження завжди на виду --}}
+    <div class="col-lg-5 col-xl-4 order-first order-lg-last">
+        <div class="news-aside d-flex flex-column gap-3">
+            <div class="card">
+                <div class="card-header fw-semibold">Публікація</div>
+                <div class="card-body">
+                    <div class="btn-group w-100 mb-3" role="group" aria-label="Статус">
+                        <input type="radio" class="btn-check" name="status" value="draft" id="status-draft" @checked($status === 'draft')>
+                        <label class="btn btn-outline-secondary" for="status-draft">Чернетка</label>
+                        <input type="radio" class="btn-check" name="status" value="published" id="status-published" @checked($status === 'published')>
+                        <label class="btn btn-outline-success" for="status-published">Опубліковано</label>
+                    </div>
 
-<div class="card mb-4">
-    <div class="card-header fw-semibold">SEO</div>
-    <div class="card-body" x-data="{ lang: 'uk' }">
-        <ul class="nav nav-tabs mb-3">
-            <li class="nav-item">
-                <button type="button" class="nav-link" :class="lang === 'uk' && 'active'" @click="lang = 'uk'">UA</button>
-            </li>
-            <li class="nav-item">
-                <button type="button" class="nav-link" :class="lang === 'en' && 'active'" @click="lang = 'en'">EN</button>
-            </li>
-        </ul>
+                    <label class="form-label">Дата публікації</label>
+                    <input type="datetime-local" name="published_at" class="form-control mb-3"
+                        value="{{ old('published_at', optional($news->published_at ?? now())->format('Y-m-d\TH:i')) }}">
 
-        <div x-show="lang === 'uk'">
-            <div class="mb-3">
-                <label class="form-label">Meta title (UA)</label>
-                <input type="text" name="meta_title[uk]" maxlength="70" class="form-control"
-                    value="{{ old('meta_title.uk', $news->getTranslation('meta_title', 'uk')) }}">
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-dark flex-fill">Зберегти</button>
+                        <a href="{{ route('admin.news.index') }}" class="btn btn-outline-secondary">Скасувати</a>
+                    </div>
+                </div>
             </div>
-            <div class="mb-3">
-                <label class="form-label">Meta description (UA)</label>
-                <textarea name="meta_description[uk]" maxlength="160" rows="2" class="form-control">{{ old('meta_description.uk', $news->getTranslation('meta_description', 'uk')) }}</textarea>
+
+            <div class="card">
+                <div class="card-header fw-semibold">Теги</div>
+                <div class="card-body">
+                    @forelse ($tags as $tag)
+                        <div class="form-check">
+                            <input type="checkbox" name="tags[]" value="{{ $tag->id }}" class="form-check-input" id="tag-{{ $tag->id }}"
+                                @checked(collect(old('tags', $selectedTagIds))->contains($tag->id))>
+                            <label class="form-check-label" for="tag-{{ $tag->id }}">{{ $tag->getTranslation('name', 'uk') }}</label>
+                        </div>
+                    @empty
+                        <p class="text-muted small mb-0">
+                            Тегів ще немає. Додати можна в розділі
+                            <a href="{{ route('admin.news-tags.index') }}">«Теги новин»</a>.
+                        </p>
+                    @endforelse
+                </div>
             </div>
-        </div>
-        <div x-show="lang === 'en'">
-            <div class="mb-3">
-                <label class="form-label">Meta title (EN)</label>
-                <input type="text" name="meta_title[en]" maxlength="70" class="form-control"
-                    value="{{ old('meta_title.en', $news->getTranslation('meta_title', 'en')) }}">
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Meta description (EN)</label>
-                <textarea name="meta_description[en]" maxlength="160" rows="2" class="form-control">{{ old('meta_description.en', $news->getTranslation('meta_description', 'en')) }}</textarea>
+
+            <div class="card">
+                <div class="card-header fw-semibold">Адреса</div>
+                <div class="card-body">
+                    <label class="form-label">URL (slug)</label>
+                    <div class="input-group">
+                        <span class="input-group-text">/news/</span>
+                        <input type="text" name="slug" class="form-control" value="{{ old('slug', $news->slug) }}" placeholder="з заголовка">
+                    </div>
+                    <div class="form-text mb-3">Один на обидві мови, латиницею. Порожній — згенерується із заголовка. Стара адреса після зміни веде на нову (301).</div>
+
+                    <label class="form-label">Зовнішнє посилання</label>
+                    <input type="url" name="external_link" class="form-control" value="{{ old('external_link', $news->external_link) }}" placeholder="https://">
+                    <div class="form-text">Якщо новина — просто посилання на іншу сторінку.</div>
+                </div>
             </div>
         </div>
     </div>
 </div>
-
-<button type="submit" class="btn btn-dark">Зберегти</button>
-<a href="{{ route('admin.news.index') }}" class="btn btn-outline-secondary">Скасувати</a>

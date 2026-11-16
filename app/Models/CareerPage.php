@@ -28,10 +28,21 @@ class CareerPage extends Model
         'meta_title',
         'meta_description',
         'og_image',
+        'notify_emails',
+        'referral_url',
     ];
 
     public static function current(): self
     {
         return static::query()->firstOrCreate(['id' => 1]);
+    }
+
+    /** Адреси для листа про новий відгук (у налаштуваннях — через кому). */
+    public function notifyEmailList(): array
+    {
+        return array_values(array_filter(
+            array_map('trim', explode(',', (string) $this->notify_emails)),
+            fn (string $email) => filter_var($email, FILTER_VALIDATE_EMAIL) !== false,
+        ));
     }
 }

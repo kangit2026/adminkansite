@@ -34,6 +34,22 @@
                 </div>
                 <button type="submit" class="btn btn-dark w-100">Увійти</button>
             </form>
+
+            @if (\App\Http\Controllers\Admin\DevLoginController::enabled(request()))
+                <div class="border-top mt-4 pt-4">
+                    <p class="small text-muted text-center mb-2">Тестовий вхід — лише на цьому комп’ютері</p>
+                    <div class="d-flex gap-2">
+                        <form method="POST" action="{{ route('admin.dev-login', 'admin') }}" class="flex-fill">
+                            @csrf
+                            <button type="submit" class="btn btn-outline-secondary w-100">Як адміністратор</button>
+                        </form>
+                        <form method="POST" action="{{ route('admin.dev-login', 'hr') }}" class="flex-fill">
+                            @csrf
+                            <button type="submit" class="btn btn-outline-secondary w-100">Як HR</button>
+                        </form>
+                    </div>
+                </div>
+            @endif
         </div>
     </div>
 </div>

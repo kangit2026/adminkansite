@@ -38,28 +38,22 @@
 
 <h2 class="h6 text-uppercase mb-3" style="font-size:.7rem;letter-spacing:.08em;font-weight:700;color:var(--kan-muted-soft);">Швидкі дії</h2>
 <div class="row g-3">
-    <div class="col-md-3 col-6">
+    <div class="col-md-4 col-6">
         <a href="{{ route('admin.news.create') }}" class="quick-link">
             <div class="stat-icon"><i class="bi bi-plus-lg"></i></div>
             <div class="small fw-medium">Додати новину</div>
         </a>
     </div>
-    <div class="col-md-3 col-6">
+    <div class="col-md-4 col-6">
         <a href="{{ route('admin.projects.create') }}" class="quick-link">
             <div class="stat-icon"><i class="bi bi-plus-lg"></i></div>
             <div class="small fw-medium">Додати проєкт</div>
         </a>
     </div>
-    <div class="col-md-3 col-6">
-        <a href="{{ route('admin.about.edit') }}" class="quick-link">
-            <div class="stat-icon"><i class="bi bi-info-circle"></i></div>
-            <div class="small fw-medium">Про компанію</div>
-        </a>
-    </div>
-    <div class="col-md-3 col-6">
-        <a href="{{ route('admin.settings.edit') }}" class="quick-link">
-            <div class="stat-icon"><i class="bi bi-house"></i></div>
-            <div class="small fw-medium">Головна</div>
+    <div class="col-md-4 col-6">
+        <a href="{{ route('admin.contact-submissions.index') }}" class="quick-link">
+            <div class="stat-icon"><i class="bi bi-inbox"></i></div>
+            <div class="small fw-medium">Заявки з форми</div>
         </a>
     </div>
 </div>

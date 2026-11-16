@@ -452,6 +452,42 @@
             font-weight: 500;
             padding-left: 0;
         }
+
+        /* ---------- HR: статуси вакансій і кандидатів ---------- */
+        .hr-pill {
+            display: inline-block;
+            padding: .3em .65em;
+            border-radius: 6px;
+            font-size: .75rem;
+            font-weight: 600;
+            line-height: 1.3;
+            white-space: nowrap;
+        }
+        .hr-pill-new { background: #ecebfa; color: #120f82; }
+        .hr-pill-in_progress { background: #fff1db; color: #7a4300; }
+        .hr-pill-interview { background: #e3eefc; color: #0b4a9e; }
+        .hr-pill-reserve, .hr-pill-draft { background: #eef0f3; color: #454c59; }
+        .hr-pill-rejected { background: #fde8e8; color: #9b1c1c; }
+        .hr-pill-hired, .hr-pill-active { background: #e2f4ea; color: #11643a; }
+        .hr-pill-closed { background: #e4e6eb; color: #33394a; }
+        .hr-row-new { --bs-table-bg: #f7f7fd; }
+        .hr-row-new .hr-name { font-weight: 700; }
+
+        .admin-sidebar .nav-link .hr-count {
+            margin-left: auto;
+            min-width: 22px;
+            padding: 1px 7px;
+            border-radius: 999px;
+            background: var(--kan-navy-soft);
+            color: var(--kan-navy);
+            font-size: .72rem;
+            font-weight: 700;
+            text-align: center;
+        }
+        .admin-sidebar .nav-link.active .hr-count { background: #fff; }
+
+        .hr-note-system { color: var(--kan-muted); font-style: italic; }
+        [x-cloak] { display: none !important; }
     </style>
 </head>
 <body>
@@ -463,11 +499,27 @@
                 <span>Admin</span>
             </div>
 
+            @role('admin')
             <div class="admin-nav-section">Загальне</div>
             <div class="nav flex-column">
                 <a class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}" href="{{ route('admin.dashboard') }}"><i class="bi bi-speedometer2"></i> Дашборд</a>
+                <a class="nav-link {{ request()->routeIs('admin.statistics') ? 'active' : '' }}" href="{{ route('admin.statistics') }}"><i class="bi bi-bar-chart-line"></i> Статистика</a>
+            </div>
+            @endrole
+
+            <div class="admin-nav-section">HR</div>
+            <div class="nav flex-column">
+                <a class="nav-link {{ request()->routeIs('admin.vacancies.*') ? 'active' : '' }}" href="{{ route('admin.vacancies.index') }}"><i class="bi bi-briefcase"></i> Вакансії</a>
+                <a class="nav-link {{ request()->routeIs('admin.candidates.*') ? 'active' : '' }}" href="{{ route('admin.candidates.index') }}">
+                    <i class="bi bi-people"></i> Кандидати
+                    @if ($hrNewCandidates > 0)
+                        <span class="hr-count" title="Нових відгуків">{{ $hrNewCandidates }}</span>
+                    @endif
+                </a>
+                <a class="nav-link {{ request()->routeIs('admin.hr-settings.*') ? 'active' : '' }}" href="{{ route('admin.hr-settings.edit') }}"><i class="bi bi-sliders"></i> Налаштування HR</a>
             </div>
 
+            @role('admin')
             <div class="admin-nav-section">Контент</div>
             <div class="nav flex-column">
                 <a class="nav-link {{ request()->routeIs('admin.settings.*') ? 'active' : '' }}" href="{{ route('admin.settings.edit') }}"><i class="bi bi-house"></i> Головна</a>
@@ -475,15 +527,11 @@
                 <a class="nav-link {{ request()->routeIs('admin.news-tags.*') ? 'active' : '' }}" href="{{ route('admin.news-tags.index') }}"><i class="bi bi-tags"></i> Теги новин</a>
                 <a class="nav-link {{ request()->routeIs('admin.projects.*') ? 'active' : '' }}" href="{{ route('admin.projects.index') }}"><i class="bi bi-buildings"></i> Проєкти</a>
                 <a class="nav-link {{ request()->routeIs('admin.project-categories.*') ? 'active' : '' }}" href="{{ route('admin.project-categories.index') }}"><i class="bi bi-diagram-3"></i> Категорії проєктів</a>
-                <a class="nav-link {{ request()->routeIs('admin.services.*') ? 'active' : '' }}" href="{{ route('admin.services.index') }}"><i class="bi bi-briefcase"></i> Послуги</a>
-                <a class="nav-link {{ request()->routeIs('admin.about.*') ? 'active' : '' }}" href="{{ route('admin.about.edit') }}"><i class="bi bi-info-circle"></i> Про компанію</a>
-                <a class="nav-link {{ request()->routeIs('admin.inside-community.*') ? 'active' : '' }}" href="{{ route('admin.inside-community.edit') }}"><i class="bi bi-people"></i> Inside Community</a>
-                <a class="nav-link {{ request()->routeIs('admin.market.*') ? 'active' : '' }}" href="{{ route('admin.market.edit') }}"><i class="bi bi-shop"></i> KAN Market</a>
-                <a class="nav-link {{ request()->routeIs('admin.career.*') ? 'active' : '' }}" href="{{ route('admin.career.edit') }}"><i class="bi bi-person-badge"></i> Кар’єра</a>
                 <a class="nav-link {{ request()->routeIs('admin.contacts.*') ? 'active' : '' }}" href="{{ route('admin.contacts.edit') }}"><i class="bi bi-envelope"></i> Контакти</a>
+                <a class="nav-link {{ request()->routeIs('admin.footer.*') ? 'active' : '' }}" href="{{ route('admin.footer.edit') }}"><i class="bi bi-layout-text-window-reverse"></i> Футер</a>
                 <a class="nav-link {{ request()->routeIs('admin.contact-submissions.*') ? 'active' : '' }}" href="{{ route('admin.contact-submissions.index') }}"><i class="bi bi-inbox"></i> Заявки з форми</a>
-                {{-- сюди додаватимуться пункти меню наступних модулів: Вакансії... --}}
             </div>
+            @endrole
 
             <div class="mt-auto px-2 pt-3 admin-sidebar-footer border-top" style="border-color: var(--kan-border-strong) !important;">
                 <a href="{{ url('/') }}" target="_blank" class="nav-link p-0 pt-3">

@@ -18,6 +18,7 @@ class NewsController extends Controller
     {
         $news = News::query()
             ->with('tags')
+            ->withCount('shares')
             ->orderByDesc('published_at')
             ->orderByDesc('id')
             ->paginate(20);
@@ -46,10 +47,6 @@ class NewsController extends Controller
 
         if ($request->hasFile('picture')) {
             $files['picture'] = StoredImage::store($request->file('picture'), 'news');
-        }
-
-        if ($request->hasFile('partner_logo')) {
-            $files['partner_logo'] = StoredImage::store($request->file('partner_logo'), 'partners');
         }
 
         if ($files) {
@@ -86,14 +83,6 @@ class NewsController extends Controller
             $data['picture'] = StoredImage::store($request->file('picture'), 'news');
         }
 
-        if ($request->hasFile('partner_logo')) {
-            if ($news->partner_logo) {
-                Storage::disk('public')->delete($news->partner_logo);
-            }
-
-            $data['partner_logo'] = StoredImage::store($request->file('partner_logo'), 'partners');
-        }
-
         $news->update($data);
         $news->tags()->sync($request->input('tags', []));
 
@@ -112,10 +101,6 @@ class NewsController extends Controller
             Storage::disk('public')->delete($news->picture);
         }
 
-        if ($news->partner_logo) {
-            Storage::disk('public')->delete($news->partner_logo);
-        }
-
         $news->delete();
 
         return back()->with('status', 'Новину видалено.');
@@ -129,33 +114,44 @@ class NewsController extends Controller
             'slug' => ['nullable', 'string', 'max:255'],
             'text.uk' => ['nullable', 'string'],
             'text.en' => ['nullable', 'string'],
-            'meta_title.uk' => ['nullable', 'string', 'max:70'],
-            'meta_title.en' => ['nullable', 'string', 'max:70'],
-            'meta_description.uk' => ['nullable', 'string', 'max:160'],
-            'meta_description.en' => ['nullable', 'string', 'max:160'],
+            // SEO-полів у формі немає: meta title = заголовок, description — з тексту (NewsResource)
             'picture' => ['nullable', 'image', 'max:65536'],
             'picture_alt.uk' => ['nullable', 'string', 'max:255'],
             'picture_alt.en' => ['nullable', 'string', 'max:255'],
-            'partner_logo' => ['nullable', 'image', 'max:65536'],
-            'partner_logo_alt.uk' => ['nullable', 'string', 'max:255'],
-            'partner_logo_alt.en' => ['nullable', 'string', 'max:255'],
             'external_link' => ['nullable', 'url', 'max:255'],
             'big_picture' => ['nullable', 'boolean'],
-            'is_partner' => ['nullable', 'boolean'],
             'status' => ['required', 'in:draft,published'],
             'published_at' => ['nullable', 'date'],
             'tags' => ['nullable', 'array'],
             'tags.*' => ['integer', 'exists:news_tags,id'],
+        ], [
+            'required' => 'Заповніть поле «:attribute».',
+            'max' => 'Поле «:attribute» задовге — до :max символів.',
+            'picture.max' => 'Картинка завелика — до 64 МБ.',
+            'image' => '«:attribute» — має бути картинка (JPG, PNG, WebP…).',
+            'url' => 'Поле «:attribute» — повна адреса, що починається з https://',
+            'date' => 'Поле «:attribute» — невірна дата.',
+            'in' => 'Оберіть значення зі списку.',
+            'exists' => 'Такого тегу вже немає — оновіть сторінку.',
+        ], [
+            'title.uk' => 'Заголовок (UA)',
+            'title.en' => 'Заголовок (EN)',
+            'slug' => 'URL (slug)',
+            'picture' => 'Зображення',
+            'picture_alt.uk' => 'Підпис картинки (UA)',
+            'picture_alt.en' => 'Alt картинки (EN)',
+            'external_link' => 'Зовнішнє посилання',
+            'status' => 'Статус',
+            'published_at' => 'Дата публікації',
         ]);
 
-        unset($data['picture'], $data['partner_logo'], $data['slug']);
+        unset($data['picture'], $data['slug']);
 
         if (isset($data['text'])) {
             $data['text'] = RichTextSanitizer::cleanTranslatable($data['text']);
         }
 
         $data['big_picture'] = $request->boolean('big_picture');
-        $data['is_partner'] = $request->boolean('is_partner');
         $data['published_at'] = $request->input('published_at') ?: now();
 
         return $data;
