@@ -8,6 +8,7 @@ use App\Models\Vacancy;
 use App\Services\SiteRevalidator;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 
 class VacancyController extends Controller
 {
@@ -154,12 +155,18 @@ class VacancyController extends Controller
             'place' => ['nullable', 'string', 'max:255'],
             'summary' => ['required', 'string', 'max:300'],
             'about' => ['required', 'string', 'max:5000'],
-            'tasks' => ['required', 'string', 'max:10000'],
-            'requirements' => ['nullable', 'string', 'max:10000'],
-            'nice_to_have' => ['nullable', 'string', 'max:10000'],
-            'offer' => ['nullable', 'string', 'max:10000'],
+            'tasks' => ['required', 'array', 'max:30'],
+            'requirements' => ['nullable', 'array', 'max:30'],
+            'nice_to_have' => ['nullable', 'array', 'max:30'],
+            'offer' => ['nullable', 'array', 'max:30'],
+            'tasks.*' => ['nullable', 'string', 'max:500'],
+            'requirements.*' => ['nullable', 'string', 'max:500'],
+            'nice_to_have.*' => ['nullable', 'string', 'max:500'],
+            'offer.*' => ['nullable', 'string', 'max:500'],
         ], [
             'required' => 'Заповніть поле «:attribute».',
+            'max.string' => 'Пункт у полі «:attribute» задовгий — до :max символів. Розбийте його на два.',
+            'max.array' => 'У полі «:attribute» забагато пунктів — до :max.',
             'max' => 'Поле «:attribute» задовге — до :max символів.',
             'slug.regex' => 'Адреса сторінки — лише малі латинські літери, цифри й дефіси.',
             'slug.unique' => 'Така адреса вже є в іншої вакансії.',
@@ -180,11 +187,14 @@ class VacancyController extends Controller
             'offer' => 'Що ми пропонуємо',
         ]);
 
-        // списки: кожен непорожній рядок — пункт; маркери «•», «-», «—» на початку прибираємо
+        // списки: кожне непорожнє поле — пункт; маркери «•», «-», «—» на початку прибираємо
         foreach (Vacancy::LISTS as $field) {
-            $lines = preg_split('/\R/u', (string) ($data[$field] ?? ''));
-            $lines = array_map(fn (string $line) => trim(preg_replace('/^\s*[•\-—–*]\s*/u', '', $line)), $lines);
+            $lines = array_map(fn ($line) => trim(preg_replace('/^\s*[•\-—–*]\s*/u', '', (string) $line)), $data[$field] ?? []);
             $data[$field] = array_values(array_filter($lines, fn (string $line) => $line !== '')) ?: null;
+        }
+
+        if (! $data['tasks']) {
+            throw ValidationException::withMessages(['tasks' => 'Додайте хоча б один пункт у полі «Чим ви займатиметеся».']);
         }
 
         return $data;
