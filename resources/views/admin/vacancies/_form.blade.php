@@ -1,8 +1,4 @@
 {{-- Поля вакансії; кнопки збереження — у бічній панелі (create / edit), прив'язані до форми через form="vacancy-form". --}}
-@php
-    $lines = fn (string $field) => old($field, implode("\n", $vacancy->{$field} ?? []));
-@endphp
-
 <div class="card mb-4">
     <div class="card-header fw-semibold">Основне</div>
     <div class="card-body">
@@ -78,25 +74,57 @@
             <textarea id="v-about" name="about" rows="7" class="form-control" required>{{ old('about', $vacancy->about) }}</textarea>
             <div class="form-text">2–3 речення про головну задачу. Новий абзац — з порожнього рядка.</div>
         </div>
-        <div class="mb-4">
-            <label class="form-label" for="v-tasks">Чим ви займатиметеся</label>
-            <textarea id="v-tasks" name="tasks" rows="9" class="form-control" required>{{ $lines('tasks') }}</textarea>
-            <div class="form-text">Кожен пункт — з нового рядка, 5–7 пунктів.</div>
-        </div>
-        <div class="mb-4">
-            <label class="form-label" for="v-requirements">Що для нас важливо</label>
-            <textarea id="v-requirements" name="requirements" rows="6" class="form-control">{{ $lines('requirements') }}</textarea>
-            <div class="form-text">Досвід, знання, навички. Кожен пункт — з нового рядка.</div>
-        </div>
-        <div class="mb-4">
-            <label class="form-label" for="v-nice">Буде перевагою</label>
-            <textarea id="v-nice" name="nice_to_have" rows="3" class="form-control">{{ $lines('nice_to_have') }}</textarea>
-            <div class="form-text">Необов’язково. Кожен пункт — з нового рядка.</div>
-        </div>
-        <div>
-            <label class="form-label" for="v-offer">Що ми пропонуємо</label>
-            <textarea id="v-offer" name="offer" rows="5" class="form-control">{{ $lines('offer') }}</textarea>
-            <div class="form-text">Необов’язково. Кожен пункт — з нового рядка.</div>
-        </div>
+        @include('admin.vacancies._list-field', ['name' => 'tasks', 'id' => 'v-tasks', 'label' => 'Чим ви займатиметеся', 'hint' => 'Обов’язково, 5–7 пунктів. Один пункт — одна дія.'])
+        @include('admin.vacancies._list-field', ['name' => 'requirements', 'id' => 'v-requirements', 'label' => 'Що для нас важливо', 'hint' => 'Досвід, знання, навички.'])
+        @include('admin.vacancies._list-field', ['name' => 'nice_to_have', 'id' => 'v-nice', 'label' => 'Буде перевагою', 'hint' => 'Необов’язково.'])
+        @include('admin.vacancies._list-field', ['name' => 'offer', 'id' => 'v-offer', 'label' => 'Що ми пропонуємо', 'hint' => 'Необов’язково.'])
     </div>
 </div>
+
+<script>
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('listField', (initial) => ({
+            seq: 0,
+            items: [],
+            init() {
+                this.items = initial.map((t) => this.make(t));
+            },
+            make(text = '') { return { key: ++this.seq, text }; },
+            resize(el) { el.style.height = 'auto'; el.style.height = el.scrollHeight + 'px'; },
+            focus(i) {
+                this.$nextTick(() => {
+                    const el = this.$root.querySelectorAll('textarea')[i];
+                    if (el) { el.focus(); this.resize(el); }
+                });
+            },
+            add(after) {
+                this.items.splice(after + 1, 0, this.make());
+                this.focus(after + 1);
+            },
+            remove(i, focusPrev = false) {
+                if (this.items.length === 1) { this.items[0].text = ''; return; }
+                this.items.splice(i, 1);
+                if (focusPrev) this.focus(Math.max(0, i - 1));
+            },
+            move(i, d) {
+                const j = i + d;
+                if (j < 0 || j >= this.items.length) return;
+                [this.items[i], this.items[j]] = [this.items[j], this.items[i]];
+            },
+            // вставка кількох рядків (з Word, Notion, Google Docs) розбивається на окремі пункти
+            paste(e, i) {
+                const text = (e.clipboardData || window.clipboardData).getData('text');
+                if (!/\r?\n/.test(text.trim())) return;
+                e.preventDefault();
+                const parts = text.split(/\r?\n/)
+                    .map((l) => l.replace(/^\s*[•\-—–*·▪●]\s*/, '').replace(/^\s*\d+[.)]\s+/, '').trim())
+                    .filter(Boolean);
+                if (!parts.length) return;
+                const cur = this.items[i];
+                if (cur.text.trim() === '') { cur.text = parts.shift(); }
+                this.items.splice(i + 1, 0, ...parts.map((t) => this.make(t)));
+                this.$nextTick(() => this.$root.querySelectorAll('textarea').forEach((el) => this.resize(el)));
+            },
+        }));
+    });
+</script>
