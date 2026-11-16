@@ -21,6 +21,13 @@ class UserController extends Controller
 
     private const ATTRIBUTES = ['name' => 'Ім’я', 'email' => 'Email', 'password' => 'Пароль', 'role' => 'Роль'];
 
+    public function index()
+    {
+        return view('admin.users.index', [
+            'users' => User::with('roles')->orderByDesc('is_active')->orderBy('name')->get(),
+        ]);
+    }
+
     public function store(Request $request)
     {
         $data = $request->validate([

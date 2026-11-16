@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\CareerDirection;
 use App\Models\CareerPage;
-use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
 
@@ -18,10 +17,6 @@ class HrSettingsController extends Controller
             'directions' => CareerDirection::ordered()
                 ->withCount(['vacancies', 'vacancies as active_vacancies_count' => fn ($q) => $q->where('status', 'active')])
                 ->get(),
-            // блок «Користувачі» — лише для адміністратора
-            'users' => $request->user()->hasRole('admin')
-                ? User::with('roles')->orderByDesc('is_active')->orderBy('name')->get()
-                : collect(),
         ]);
     }
 
