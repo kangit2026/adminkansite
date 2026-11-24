@@ -1,0 +1,346 @@
+{
+  "project_step": "project",
+  "intent": {
+    "id": "intent",
+    "label": {
+      "uk": "Запит",
+      "en": "Request"
+    },
+    "question": {
+      "uk": "Що вас цікавить?",
+      "en": "What are you interested in?"
+    },
+    "hint": {
+      "uk": "Оберіть найближче — решту уточнить менеджер.",
+      "en": "Pick the closest — the manager will clarify the rest."
+    },
+    "options": [
+      {
+        "value": "apartment",
+        "label": {
+          "uk": "Квартира в житловому кварталі",
+          "en": "An apartment in a residential neighbourhood"
+        },
+        "enabled": true
+      },
+      {
+        "value": "commercial",
+        "label": {
+          "uk": "Комерційне приміщення",
+          "en": "Commercial premises"
+        },
+        "enabled": true
+      },
+      {
+        "value": "question",
+        "label": {
+          "uk": "Хочу щось уточнити",
+          "en": "I want to ask something"
+        },
+        "enabled": true
+      }
+    ]
+  },
+  "paths": {
+    "apartment": [
+      {
+        "id": "project",
+        "label": {
+          "uk": "Квартал",
+          "en": "Neighbourhood"
+        },
+        "question": {
+          "uk": "У якому кварталі шукаєте квартиру?",
+          "en": "Which neighbourhood are you looking at?"
+        },
+        "hint": {
+          "uk": "Не визначились — оберіть «Допоможіть обрати», менеджер підкаже.",
+          "en": "Not sure yet? Pick “Help me choose” and the manager will advise."
+        },
+        "options": [
+          {
+            "value": "biorytm",
+            "label": {
+              "uk": "БІОРИТМ",
+              "en": "Biorytm"
+            },
+            "enabled": true
+          },
+          {
+            "value": "fayna-town",
+            "label": {
+              "uk": "Файна Таун",
+              "en": "Fayna Town"
+            },
+            "enabled": true
+          },
+          {
+            "value": "respublika",
+            "label": {
+              "uk": "Respublika",
+              "en": "Respublika"
+            },
+            "enabled": true
+          },
+          {
+            "value": "unit-home",
+            "label": {
+              "uk": "UNIT.Home",
+              "en": "UNIT.Home"
+            },
+            "enabled": true
+          },
+          {
+            "value": "help",
+            "label": {
+              "uk": "Допоможіть обрати",
+              "en": "Help me choose"
+            },
+            "enabled": true
+          }
+        ]
+      },
+      {
+        "id": "rooms",
+        "label": {
+          "uk": "Кімнати",
+          "en": "Rooms"
+        },
+        "question": {
+          "uk": "Скільки кімнат потрібно?",
+          "en": "How many rooms do you need?"
+        },
+        "hint": {
+          "uk": "",
+          "en": ""
+        },
+        "options": [
+          {
+            "value": "studio",
+            "label": {
+              "uk": "Студія",
+              "en": "Studio"
+            },
+            "enabled": true
+          },
+          {
+            "value": "1",
+            "label": {
+              "uk": "1 кімната",
+              "en": "1 room"
+            },
+            "enabled": true
+          },
+          {
+            "value": "2",
+            "label": {
+              "uk": "2 кімнати",
+              "en": "2 rooms"
+            },
+            "enabled": true
+          },
+          {
+            "value": "3",
+            "label": {
+              "uk": "3 кімнати і більше",
+              "en": "3 rooms or more"
+            },
+            "enabled": true
+          },
+          {
+            "value": "unknown",
+            "label": {
+              "uk": "Ще не знаю",
+              "en": "Not sure yet"
+            },
+            "enabled": true
+          }
+        ]
+      },
+      {
+        "id": "purpose",
+        "label": {
+          "uk": "Мета",
+          "en": "Purpose"
+        },
+        "question": {
+          "uk": "Купуєте для себе чи як інвестицію?",
+          "en": "Are you buying for yourself or as an investment?"
+        },
+        "hint": {
+          "uk": "",
+          "en": ""
+        },
+        "options": [
+          {
+            "value": "self",
+            "label": {
+              "uk": "Для себе та родини",
+              "en": "For myself and family"
+            },
+            "enabled": true
+          },
+          {
+            "value": "invest",
+            "label": {
+              "uk": "Як інвестицію",
+              "en": "As an investment"
+            },
+            "enabled": true
+          },
+          {
+            "value": "undecided",
+            "label": {
+              "uk": "Ще вирішую",
+              "en": "Still deciding"
+            },
+            "enabled": true
+          }
+        ]
+      }
+    ],
+    "commercial": [
+      {
+        "id": "kind",
+        "label": {
+          "uk": "Приміщення",
+          "en": "Premises"
+        },
+        "question": {
+          "uk": "Яке приміщення шукаєте?",
+          "en": "What kind of premises are you looking for?"
+        },
+        "hint": {
+          "uk": "",
+          "en": ""
+        },
+        "options": [
+          {
+            "value": "office",
+            "label": {
+              "uk": "Офіс",
+              "en": "Office"
+            },
+            "enabled": true
+          },
+          {
+            "value": "retail",
+            "label": {
+              "uk": "Торгове приміщення",
+              "en": "Retail space"
+            },
+            "enabled": true
+          },
+          {
+            "value": "other",
+            "label": {
+              "uk": "Інше",
+              "en": "Other"
+            },
+            "enabled": true
+          },
+          {
+            "value": "unknown",
+            "label": {
+              "uk": "Ще не знаю",
+              "en": "Not sure yet"
+            },
+            "enabled": true
+          }
+        ]
+      },
+      {
+        "id": "mode",
+        "label": {
+          "uk": "Формат",
+          "en": "Format"
+        },
+        "question": {
+          "uk": "Купівля чи оренда?",
+          "en": "Buy or rent?"
+        },
+        "hint": {
+          "uk": "",
+          "en": ""
+        },
+        "options": [
+          {
+            "value": "buy",
+            "label": {
+              "uk": "Купівля",
+              "en": "Buy"
+            },
+            "enabled": true
+          },
+          {
+            "value": "rent",
+            "label": {
+              "uk": "Оренда",
+              "en": "Rent"
+            },
+            "enabled": true
+          },
+          {
+            "value": "unknown",
+            "label": {
+              "uk": "Ще не знаю",
+              "en": "Not sure yet"
+            },
+            "enabled": true
+          }
+        ]
+      }
+    ],
+    "question": [
+      {
+        "id": "topic",
+        "label": {
+          "uk": "Тема",
+          "en": "Topic"
+        },
+        "question": {
+          "uk": "Про що ваше питання?",
+          "en": "What is your question about?"
+        },
+        "hint": {
+          "uk": "",
+          "en": ""
+        },
+        "options": [
+          {
+            "value": "payment",
+            "label": {
+              "uk": "Умови оплати",
+              "en": "Payment terms"
+            },
+            "enabled": true
+          },
+          {
+            "value": "progress",
+            "label": {
+              "uk": "Терміни та хід будівництва",
+              "en": "Timelines and construction progress"
+            },
+            "enabled": true
+          },
+          {
+            "value": "docs",
+            "label": {
+              "uk": "Документи та договір",
+              "en": "Documents and contract"
+            },
+            "enabled": true
+          },
+          {
+            "value": "other",
+            "label": {
+              "uk": "Інше",
+              "en": "Other"
+            },
+            "enabled": true
+          }
+        ]
+      }
+    ]
+  }
+}

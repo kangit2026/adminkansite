@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\ContactSubmission;
+use App\Support\HomeQuiz;
 use App\Services\SubmissionNotifier;
 use App\Services\TurnstileVerifier;
 use Closure;
@@ -100,6 +101,7 @@ class LeadController extends Controller
             'phone' => ['required', 'string', 'max:50', $this->phoneRule()],
             'type' => ['nullable', 'string', 'max:100'],
             'project' => ['nullable', 'string', 'max:100'],
+            'quiz' => ['nullable', 'string', 'max:2000'],
             'source_page' => ['nullable', 'string', 'max:255'],
             'consent' => ['accepted'],
             'turnstile_token' => ['nullable', 'string', 'max:2048'],
@@ -107,13 +109,20 @@ class LeadController extends Controller
 
         $this->turnstile->verify($data['turnstile_token'] ?? null, $request->ip());
 
+        // квіз на головній шле відповіді як JSON {id кроку: значення} — кожна відповідь стає окремим полем заявки;
+        // решта форм (сторінки проєктів) — як раніше: проєкт і тип одним рядком
+        $answers = isset($data['quiz']) ? json_decode($data['quiz'], true) : null;
+        $payload = is_array($answers) && $answers
+            ? HomeQuiz::payloadFor($answers)
+            : [
+                'Проєкт' => $data['project'] ?? null,
+                'Тип / вибір' => $data['type'] ?? null,
+            ];
+
         return $this->store('apartment', $request, [
             'name' => Str::squish($data['name']),
             'phone' => Str::squish($data['phone']),
-            'payload' => array_filter([
-                'Проєкт' => $data['project'] ?? null,
-                'Тип / вибір' => $data['type'] ?? null,
-            ], fn ($v) => filled($v)),
+            'payload' => array_filter($payload, fn ($v) => filled($v)),
             'source_page' => $data['source_page'] ?? null,
         ]);
     }
