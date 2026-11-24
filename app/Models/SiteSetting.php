@@ -64,11 +64,13 @@ class SiteSetting extends Model
         'award_third_description',
         'award_fourth_value',
         'award_fourth_description',
+        'home_quiz',
     ];
 
     protected function casts(): array
     {
         return [
+            'home_quiz' => 'array',
             'copyright_year' => 'integer',
             'award_first_value' => 'integer',
             'award_second_value' => 'integer',

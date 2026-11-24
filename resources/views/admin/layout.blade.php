@@ -530,6 +530,7 @@
                 <a class="nav-link {{ request()->routeIs('admin.project-categories.*') ? 'active' : '' }}" href="{{ route('admin.project-categories.index') }}"><i class="bi bi-diagram-3"></i> Категорії проєктів</a>
                 <a class="nav-link {{ request()->routeIs('admin.contacts.*') ? 'active' : '' }}" href="{{ route('admin.contacts.edit') }}"><i class="bi bi-envelope"></i> Контакти</a>
                 <a class="nav-link {{ request()->routeIs('admin.footer.*') ? 'active' : '' }}" href="{{ route('admin.footer.edit') }}"><i class="bi bi-layout-text-window-reverse"></i> Футер</a>
+                <a class="nav-link {{ request()->routeIs('admin.quiz.*') ? 'active' : '' }}" href="{{ route('admin.quiz.edit') }}"><i class="bi bi-ui-checks"></i> Квіз заявки</a>
                 <a class="nav-link {{ request()->routeIs('admin.contact-submissions.*') ? 'active' : '' }}" href="{{ route('admin.contact-submissions.index') }}"><i class="bi bi-inbox"></i> Заявки з форми</a>
             </div>
             @endrole

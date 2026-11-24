@@ -12,11 +12,13 @@ use App\Http\Controllers\Api\MarketController;
 use App\Http\Controllers\Api\NewsController;
 use App\Http\Controllers\Api\NewsShareController;
 use App\Http\Controllers\Api\ProjectController;
+use App\Http\Controllers\Api\QuizController;
 use App\Http\Controllers\Api\ServiceController;
 use App\Http\Controllers\Api\SettingsController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/settings', [SettingsController::class, 'show']);
+Route::get('/quiz', [QuizController::class, 'show']);
 Route::get('/about', [AboutController::class, 'show']);
 Route::get('/inside-community', [InsideCommunityController::class, 'show']);
 Route::get('/market', [MarketController::class, 'show']);

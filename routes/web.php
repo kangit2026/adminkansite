@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\CandidateController;
 use App\Http\Controllers\Admin\CareerDirectionController;
 use App\Http\Controllers\Admin\ContactSubmissionController;
+use App\Http\Controllers\Admin\HomeQuizController;
 use App\Http\Controllers\Admin\ContactsController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
@@ -85,6 +86,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('/project-categories', [ProjectCategoryController::class, 'store'])->name('project-categories.store');
         Route::put('/project-categories/{projectCategory}', [ProjectCategoryController::class, 'update'])->name('project-categories.update');
         Route::delete('/project-categories/{projectCategory}', [ProjectCategoryController::class, 'destroy'])->name('project-categories.destroy');
+
+        Route::get('/quiz', [HomeQuizController::class, 'edit'])->name('quiz.edit');
+        Route::put('/quiz', [HomeQuizController::class, 'update'])->name('quiz.update');
+        Route::delete('/quiz', [HomeQuizController::class, 'reset'])->name('quiz.reset');
 
         Route::get('/footer', [SiteFooterSettingsController::class, 'edit'])->name('footer.edit');
         Route::put('/footer', [SiteFooterSettingsController::class, 'update'])->name('footer.update');
